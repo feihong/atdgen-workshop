@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@ahrefs/bs-atdgen-codec-runtime@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@ahrefs/bs-atdgen-codec-runtime/-/bs-atdgen-codec-runtime-1.1.0.tgz#56cb0df6f70a657c2d9bc6da6f16ad6135da805f"
+  integrity sha512-sy9iUf8CwnsWpYMYOhQkPQ6rDMbFKHlEGxm2XLlQfyFudBWw3QtZtP/TRyen453JzqzGZ9Ci0qe5TeQIkEv2Ug==
+  dependencies:
+    "@glennsl/bs-json" "^3.0.0"
+
+"@glennsl/bs-json@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@glennsl/bs-json/-/bs-json-3.0.0.tgz#b4e1cf6612270a8dd7287a8a71ebe17e8f0fb683"
+  integrity sha512-slqtGLd/c3yQK9Qfd1gfMB9JCzNU4wzCpVPfO9pXlG64M+te5r30FK++tb3uQEVlVLYtpgZ4wCHtkI8xoshgxQ==
+
 bs-platform@^4.0.14:
   version "4.0.14"
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-4.0.14.tgz#1d9e9622d59ebf4d39408d07b41997201c5f9750"

@@ -7,5 +7,13 @@
   "license": "MIT",
   "devDependencies": {
     "bs-platform": "^4.0.14"
+  },
+  "dependencies": {
+    "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0"
+  },
+  "scripts": {
+    "clean": "bsb -clean-world",
+    "build": "bsb -make-world",
+    "atdgen": "source atdgen.sh"
   }
 }

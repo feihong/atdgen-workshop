@@ -23,4 +23,9 @@ Note: Run `opam switch list-available` to get a list of all available compiler v
 Install BuckleScript
 
     yarn init
+
+    # Install bs-platform
     yarn add bs-platform --dev
+
+    # Add runtime to be used by generated code
+    yarn add @ahrefs/bs-atdgen-codec-runtime

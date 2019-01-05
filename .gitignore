@@ -1,2 +1,4 @@
 /_opam
 /node_modules
+/lib
+*.bs.js
