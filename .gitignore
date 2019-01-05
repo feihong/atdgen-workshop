@@ -4,3 +4,6 @@
 *.bs.js
 
 secrets.json
+config.json
+
+*.json

@@ -12,31 +12,33 @@ let secrets =
 
 let fetchEventbrite = (latitude, longitude) => {
   let filename = "eventbrite.json";
-  let url = "https://www.eventbriteapi.com/v3/events/search?" ++ {
-    "token": secrets.eventbriteToken,
-    "location.latitude": latitude,
-    "location.longitude": longitude,
-    "location.within": "1mi",
-    "sort_by": "date",
-  }
-  ->Utils.makeQueryString;
+  let url =
+    "https://www.eventbriteapi.com/v3/events/search?"
+    ++ {
+         "token": secrets.eventbriteToken,
+         "location.latitude": latitude,
+         "location.longitude": longitude,
+         "location.within": "1mi",
+         "sort_by": "date",
+       }
+       ->Utils.makeQueryString;
 
   Js.Promise.(
-    (if (Node.Fs.existsSync(filename)) {
-      Node.Fs.readFileAsUtf8Sync(filename)
-      ->Js.Json.parseExn
-      ->resolve
-    } else {
-      Fetch.fetch(url)
-      |> then_(Fetch.Response.json)
-      |> then_(json => {
-          let text = json->Js.Json.stringifyWithSpace(2);
-          Node.Fs.writeFileAsUtf8Sync(filename, text);
-          resolve(json);
-        })
-    })
+    (
+      if (Node.Fs.existsSync(filename)) {
+        Node.Fs.readFileAsUtf8Sync(filename)->Js.Json.parseExn->resolve;
+      } else {
+        Fetch.fetch(url)
+        |> then_(Fetch.Response.json)
+        |> then_(json => {
+             let text = json->Js.Json.stringifyWithSpace(2);
+             Node.Fs.writeFileAsUtf8Sync(filename, text);
+             resolve(json);
+           });
+      }
+    )
     |> then_(json => json->Eventbrite_bs.read_result->resolve)
-  )
+  );
 };
 
 let fetchIpApi = () => {
@@ -45,22 +47,22 @@ let fetchIpApi = () => {
     Fetch.fetch(url)
     |> then_(Fetch.Response.json)
     |> then_(json => json->Ipapi_bs.read_result->resolve)
-  )
-}
-
-/* Js.Promise.(
-  fetchEventbrite(0, 0)
-  |> then_(result =>
-    Js.log(result.Eventbrite_t.events->List.toArray)->resolve
-  )
-)->ignore */
+  );
+};
 
 Js.Promise.(
   fetchIpApi()
   |> then_(result => {
-    Printf.sprintf("You are in %s, %s, %s", result.Ipapi_t.city, result.region, result.country)
-    ->Js.log;
-    resolve((result.lat, result.lon));
-    /* fetchEventbrite(result.lat, result.lon); */
-  })
-)
+       Printf.sprintf(
+         "You are in %s, %s, %s",
+         result.Ipapi_t.city,
+         result.region,
+         result.country,
+       )
+       ->Js.log;
+       fetchEventbrite(result.lat, result.lon);
+     })
+  |> then_(result =>
+       Js.log(result.Eventbrite_t.events->List.toArray)->resolve
+     )
+);
