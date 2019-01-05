@@ -30,10 +30,23 @@ type event = Eventbrite_t.event = {
 
 type events = Eventbrite_t.events
 
-type result = Eventbrite_t.result = {
+type searchResult = Eventbrite_t.searchResult = {
   pagination: pagination;
   events: events
 }
+
+type requestMethod = Eventbrite_t.requestMethod =  Get | Post 
+
+type batchResult = Eventbrite_t.batchResult = { body: string; code: int }
+
+type batchResults = Eventbrite_t.batchResults
+
+type batchRequest = Eventbrite_t.batchRequest = {
+  method_: requestMethod;
+  relative_url: string
+}
+
+type batchInput = Eventbrite_t.batchInput
 
 let write_textHtml = (
   Atdgen_codec_runtime.Encode.make (fun (t : textHtml) ->
@@ -349,8 +362,8 @@ let write_events = (
 let read_events = (
   read__1
 )
-let write_result = (
-  Atdgen_codec_runtime.Encode.make (fun (t : result) ->
+let write_searchResult = (
+  Atdgen_codec_runtime.Encode.make (fun (t : searchResult) ->
     (
     Atdgen_codec_runtime.Encode.obj
       [
@@ -371,7 +384,7 @@ let write_result = (
     )
   )
 )
-let read_result = (
+let read_searchResult = (
   Atdgen_codec_runtime.Decode.make (fun json ->
     (
       ({
@@ -387,7 +400,147 @@ let read_result = (
               read_events
               |> Atdgen_codec_runtime.Decode.field "events"
             ) json;
-      } : result)
+      } : searchResult)
     )
   )
+)
+let write_requestMethod = (
+  Atdgen_codec_runtime.Encode.make (fun (x : requestMethod) -> match x with
+    | Get ->
+    Atdgen_codec_runtime.Encode.constr0 "GET"
+    | Post ->
+    Atdgen_codec_runtime.Encode.constr0 "POST"
+  )
+)
+let read_requestMethod = (
+  Atdgen_codec_runtime.Decode.enum
+  [
+      (
+      "GET"
+      ,
+        `Single (Get)
+      )
+    ;
+      (
+      "POST"
+      ,
+        `Single (Post)
+      )
+  ]
+)
+let write_batchResult = (
+  Atdgen_codec_runtime.Encode.make (fun (t : batchResult) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"body"
+          t.body
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.int
+            )
+          ~name:"code"
+          t.code
+      ]
+    )
+  )
+)
+let read_batchResult = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          body =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "body"
+            ) json;
+          code =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.int
+              |> Atdgen_codec_runtime.Decode.field "code"
+            ) json;
+      } : batchResult)
+    )
+  )
+)
+let write__3 = (
+  Atdgen_codec_runtime.Encode.list (
+    write_batchResult
+  )
+)
+let read__3 = (
+  Atdgen_codec_runtime.Decode.list (
+    read_batchResult
+  )
+)
+let write_batchResults = (
+  write__3
+)
+let read_batchResults = (
+  read__3
+)
+let write_batchRequest = (
+  Atdgen_codec_runtime.Encode.make (fun (t : batchRequest) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            write_requestMethod
+            )
+          ~name:"method"
+          t.method_
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"relative_url"
+          t.relative_url
+      ]
+    )
+  )
+)
+let read_batchRequest = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          method_ =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              read_requestMethod
+              |> Atdgen_codec_runtime.Decode.field "method"
+            ) json;
+          relative_url =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "relative_url"
+            ) json;
+      } : batchRequest)
+    )
+  )
+)
+let write__2 = (
+  Atdgen_codec_runtime.Encode.list (
+    write_batchRequest
+  )
+)
+let read__2 = (
+  Atdgen_codec_runtime.Decode.list (
+    read_batchRequest
+  )
+)
+let write_batchInput = (
+  write__2
+)
+let read_batchInput = (
+  read__2
 )

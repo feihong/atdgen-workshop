@@ -3,7 +3,7 @@ https://www.eventbrite.com/platform/api
 
 *)
 
-type result = {
+type searchResult = {
   pagination: pagination;
   events: events;
 }
@@ -40,3 +40,21 @@ type datetime = {
   utc: string;
 }
 
+type batchInput = batchRequest list
+
+type batchRequest = {
+  method_ <json name="method">: requestMethod;
+  relative_url: string;
+}
+
+type requestMethod = [
+  | Get <json name="GET">
+  | Post <json name="POST">
+] <ocaml repr="classic">
+
+type batchResults = batchResult list
+
+type batchResult = {
+  body: string;
+  code: int;
+}

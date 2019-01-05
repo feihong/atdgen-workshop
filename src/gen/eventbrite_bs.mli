@@ -30,10 +30,23 @@ type event = Eventbrite_t.event = {
 
 type events = Eventbrite_t.events
 
-type result = Eventbrite_t.result = {
+type searchResult = Eventbrite_t.searchResult = {
   pagination: pagination;
   events: events
 }
+
+type requestMethod = Eventbrite_t.requestMethod =  Get | Post 
+
+type batchResult = Eventbrite_t.batchResult = { body: string; code: int }
+
+type batchResults = Eventbrite_t.batchResults
+
+type batchRequest = Eventbrite_t.batchRequest = {
+  method_: requestMethod;
+  relative_url: string
+}
+
+type batchInput = Eventbrite_t.batchInput
 
 val read_textHtml :  textHtml Atdgen_codec_runtime.Decode.t
 
@@ -55,7 +68,27 @@ val read_events :  events Atdgen_codec_runtime.Decode.t
 
 val write_events :  events Atdgen_codec_runtime.Encode.t
 
-val read_result :  result Atdgen_codec_runtime.Decode.t
+val read_searchResult :  searchResult Atdgen_codec_runtime.Decode.t
 
-val write_result :  result Atdgen_codec_runtime.Encode.t
+val write_searchResult :  searchResult Atdgen_codec_runtime.Encode.t
+
+val read_requestMethod :  requestMethod Atdgen_codec_runtime.Decode.t
+
+val write_requestMethod :  requestMethod Atdgen_codec_runtime.Encode.t
+
+val read_batchResult :  batchResult Atdgen_codec_runtime.Decode.t
+
+val write_batchResult :  batchResult Atdgen_codec_runtime.Encode.t
+
+val read_batchResults :  batchResults Atdgen_codec_runtime.Decode.t
+
+val write_batchResults :  batchResults Atdgen_codec_runtime.Encode.t
+
+val read_batchRequest :  batchRequest Atdgen_codec_runtime.Decode.t
+
+val write_batchRequest :  batchRequest Atdgen_codec_runtime.Encode.t
+
+val read_batchInput :  batchInput Atdgen_codec_runtime.Decode.t
+
+val write_batchInput :  batchInput Atdgen_codec_runtime.Encode.t
 

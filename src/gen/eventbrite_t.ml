@@ -26,4 +26,14 @@ type event = {
 
 type events = event list
 
-type result = { pagination: pagination; events: events }
+type searchResult = { pagination: pagination; events: events }
+
+type requestMethod =  Get | Post 
+
+type batchResult = { body: string; code: int }
+
+type batchResults = batchResult list
+
+type batchRequest = { method_: requestMethod; relative_url: string }
+
+type batchInput = batchRequest list

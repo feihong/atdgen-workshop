@@ -37,7 +37,7 @@ let fetchEventbrite = (latitude, longitude) => {
            });
       }
     )
-    |> then_(json => json->Eventbrite_bs.read_result->resolve)
+    |> then_(json => json->Eventbrite_bs.read_searchResult->resolve)
   );
 };
 
