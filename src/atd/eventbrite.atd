@@ -3,16 +3,40 @@ https://www.eventbrite.com/platform/api
 
 *)
 
+type result = {
+  pagination: pagination;
+  events: events;
+}
+
 type pagination = {
   object_count: int;
   page_number: int;
   page_size: int;
   page_count: int;
-  continuation: string;
+  has_more_items: bool;
 }
 
+type events = event list
+
 type event = {
-  name: string;
-  description: string;
+  id: string;
+  name: textHtml;
+  description: textHtml;
   url: string;
+  start: datetime;
+  end_ <json name="end">: datetime;
+  is_series: bool;
+  venue_id: string;
 }
+
+type textHtml = {
+  text: string;
+  html: string;
+}
+
+type datetime = {
+  timezone: string;
+  local: string;
+  utc: string;
+}
+

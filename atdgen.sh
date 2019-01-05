@@ -6,3 +6,4 @@ function build {
 cd src
 build eventbrite
 build config
+yarn build

@@ -17,12 +17,24 @@ let queryString =
 
 let url = "https://www.eventbriteapi.com/v3/events/search?" ++ queryString;
 Js.log(url);
-Js.Promise.(
-  Fetch.fetch(url)
-  |> then_(Fetch.Response.text)
-  |> then_(json => {
-       /* Js.log(json); */
-       Node.Fs.writeFileAsUtf8Sync("sample.json", json);
-       resolve();
-     })
-);
+
+let filename = "results.json";
+
+if (Node.Fs.existsSync(filename)) {
+  let result =
+    Node.Fs.readFileAsUtf8Sync(filename)
+    ->Js.Json.parseExn
+    ->Eventbrite_bs.read_result;
+  Js.log(result.events->List.toArray);
+} else {
+  Js.Promise.(
+    Fetch.fetch(url)
+    |> then_(Fetch.Response.json)
+    |> then_(json => {
+         let text = json->Js.Json.stringifyWithSpace(2);
+         Node.Fs.writeFileAsUtf8Sync(filename, text);
+         resolve();
+       })
+  )
+  ->ignore;
+};
