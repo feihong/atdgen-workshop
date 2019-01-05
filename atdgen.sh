@@ -1,3 +1,8 @@
+function build {
+  atdgen -t atd/$1.atd -o gen/$1
+  atdgen -bs atd/$1.atd -o gen/$1
+}
+
 cd src
-atdgen -t atd/eventbrite.atd -o gen/eventbrite
-atdgen -bs atd/eventbrite.atd -o gen/eventbrite
+build eventbrite
+build config
