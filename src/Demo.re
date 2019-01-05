@@ -17,11 +17,12 @@ let queryString =
 
 let url = "https://www.eventbriteapi.com/v3/events/search?" ++ queryString;
 Js.log(url);
-/* Js.Promise.(
-     Fetch.fetch(url)
-     |> then_(Fetch.Response.json)
-     |> then_(json => {
-          Js.log(json);
-          resolve();
-        })
-   ); */
+Js.Promise.(
+  Fetch.fetch(url)
+  |> then_(Fetch.Response.text)
+  |> then_(json => {
+       /* Js.log(json); */
+       Node.Fs.writeFileAsUtf8Sync("sample.json", json);
+       resolve();
+     })
+);
