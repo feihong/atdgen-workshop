@@ -2,39 +2,65 @@
 open Prelude;
 
 let secrets =
-  Node.Fs.readFileAsUtf8Sync("./secrets.json")
-  ->Js.Json.parseExn
-  ->Config_bs.read_secrets;
+  try (
+    Node.Fs.readFileAsUtf8Sync("./secrets.json")
+    ->Js.Json.parseExn
+    ->Config_bs.read_secrets
+  ) {
+  | _ => {eventbriteToken: "", facebookToken: ""}
+  };
 
-let queryString =
-  {
+let fetchEventbrite = (latitude, longitude) => {
+  let filename = "eventbrite.json";
+  let url = "https://www.eventbriteapi.com/v3/events/search?" ++ {
     "token": secrets.eventbriteToken,
-    "location.address": "2100 S Wentworth Ave, Chicago, IL 60616",
+    "location.latitude": latitude,
+    "location.longitude": longitude,
     "location.within": "1mi",
     "sort_by": "date",
   }
   ->Utils.makeQueryString;
 
-let url = "https://www.eventbriteapi.com/v3/events/search?" ++ queryString;
-Js.log(url);
+  Js.Promise.(
+    (if (Node.Fs.existsSync(filename)) {
+      Node.Fs.readFileAsUtf8Sync(filename)
+      ->Js.Json.parseExn
+      ->resolve
+    } else {
+      Fetch.fetch(url)
+      |> then_(Fetch.Response.json)
+      |> then_(json => {
+          let text = json->Js.Json.stringifyWithSpace(2);
+          Node.Fs.writeFileAsUtf8Sync(filename, text);
+          resolve(json);
+        })
+    })
+    |> then_(json => json->Eventbrite_bs.read_result->resolve)
+  )
+};
 
-let filename = "results.json";
-
-if (Node.Fs.existsSync(filename)) {
-  let result =
-    Node.Fs.readFileAsUtf8Sync(filename)
-    ->Js.Json.parseExn
-    ->Eventbrite_bs.read_result;
-  Js.log(result.events->List.toArray);
-} else {
+let fetchIpApi = () => {
+  let url = "http://ip-api.com/json/";
   Js.Promise.(
     Fetch.fetch(url)
     |> then_(Fetch.Response.json)
-    |> then_(json => {
-         let text = json->Js.Json.stringifyWithSpace(2);
-         Node.Fs.writeFileAsUtf8Sync(filename, text);
-         resolve();
-       })
+    |> then_(json => json->Ipapi_bs.read_result->resolve)
   )
-  ->ignore;
-};
+}
+
+/* Js.Promise.(
+  fetchEventbrite(0, 0)
+  |> then_(result =>
+    Js.log(result.Eventbrite_t.events->List.toArray)->resolve
+  )
+)->ignore */
+
+Js.Promise.(
+  fetchIpApi()
+  |> then_(result => {
+    Printf.sprintf("You are in %s, %s, %s", result.Ipapi_t.city, result.region, result.country)
+    ->Js.log;
+    resolve((result.lat, result.lon));
+    /* fetchEventbrite(result.lat, result.lon); */
+  })
+)

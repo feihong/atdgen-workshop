@@ -1,0 +1,9 @@
+(* http://ip-api.com/docs/api:json *)
+
+type result = {
+  country: string;
+  region: string;
+  city: string;
+  lat: float;
+  lon: float;
+}
