@@ -9,7 +9,9 @@
     "bs-platform": "^4.0.14"
   },
   "dependencies": {
-    "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0"
+    "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0",
+    "bs-fetch": "^0.3.1",
+    "isomorphic-fetch": "^2.2.1"
   },
   "scripts": {
     "clean": "bsb -clean-world",

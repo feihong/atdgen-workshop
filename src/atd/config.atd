@@ -1,0 +1,10 @@
+type secrets = {
+  eventbriteToken: string;
+  facebookToken: string;
+}
+
+type config = {
+  keywords: string list;
+  facebookPages: string list;
+  eventbriteLocation: string;
+}
