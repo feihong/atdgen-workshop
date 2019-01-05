@@ -2,8 +2,8 @@
   "name": "atdgen-quickstart",
   "version": "0.1.0",
   "sources": {
-    "dir" : "src",
-    "subdirs" : true
+    "dir": "src",
+    "subdirs": true
   },
   "package-specs": {
     "module": "commonjs",
@@ -11,10 +11,11 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "@ahrefs/bs-atdgen-codec-runtime"
+    "@ahrefs/bs-atdgen-codec-runtime",
+    "bs-fetch"
   ],
   "warnings": {
-    "error" : "+101"
+    "error": "+101"
   },
   "refmt": 3
 }
