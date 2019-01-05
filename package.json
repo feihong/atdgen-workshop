@@ -14,6 +14,8 @@
     "isomorphic-fetch": "^2.2.1"
   },
   "scripts": {
+    "postinstall": "opam pin add atd --dev-repo && opam pin add atdgen --dev-repo",
+    "main": "node src/Main.bs.js",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "atdgen": "source atdgen.sh"

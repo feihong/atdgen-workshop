@@ -10,8 +10,8 @@ S /Users/fhsu/work/atdgen-quickstart/node_modules/bs-fetch/lib/ocaml
 B /Users/fhsu/work/atdgen-quickstart/node_modules/bs-fetch/lib/ocaml
 S src
 B lib/bs/src
-S src/bindings
-B lib/bs/src/bindings
 S src/gen
 B lib/bs/src/gen
+S src/bindings
+B lib/bs/src/bindings
 ####BSB GENERATED: NO EDIT}
