@@ -1,6 +1,8 @@
 (* Auto-generated from "eventbrite.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
+type venue = { id: string; name: string; address: string }
+
 type textHtml = { text: string; html: string }
 
 type pagination = {
@@ -9,6 +11,13 @@ type pagination = {
   page_size: int;
   page_count: int;
   has_more_items: bool
+}
+
+type organizer = {
+  id: string;
+  name: string;
+  description: textHtml;
+  url: string
 }
 
 type datetime = { timezone: string; local: string; utc: string }
@@ -21,19 +30,11 @@ type event = {
   start: datetime;
   end_: datetime;
   is_series: bool;
-  venue_id: string
+  online_event: bool;
+  venue: venue option;
+  organizer: organizer option
 }
 
 type events = event list
 
 type searchResult = { pagination: pagination; events: events }
-
-type requestMethod =  Get | Post 
-
-type batchResult = { body: string; code: int }
-
-type batchResults = batchResult list
-
-type batchRequest = { method_: requestMethod; relative_url: string }
-
-type batchInput = batchRequest list

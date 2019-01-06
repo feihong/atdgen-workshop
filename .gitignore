@@ -3,7 +3,9 @@
 /lib
 *.bs.js
 
+# Config
 secrets.json
 config.json
 
-*.json
+# Downloaded files
+eventbrite.json

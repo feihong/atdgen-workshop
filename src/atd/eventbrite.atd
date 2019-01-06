@@ -26,7 +26,22 @@ type event = {
   start: datetime;
   end_ <json name="end">: datetime;
   is_series: bool;
-  venue_id: string;
+  online_event: bool;
+  ?venue: venue nullable;
+  ?organizer: organizer nullable;
+}
+
+type venue = {
+  id: string;
+  name: string;
+  address: string;
+}
+
+type organizer = {
+  id: string;
+  name: string;
+  description: textHtml;
+  url: string;
 }
 
 type textHtml = {
@@ -40,7 +55,7 @@ type datetime = {
   utc: string;
 }
 
-type batchInput = batchRequest list
+(* type batchInput = batchRequest list
 
 type batchRequest = {
   method_ <json name="method">: requestMethod;
@@ -57,4 +72,4 @@ type batchResults = batchResult list
 type batchResult = {
   body: string;
   code: int;
-}
+} *)

@@ -1,6 +1,12 @@
 (* Auto-generated from "eventbrite.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
+type venue = Eventbrite_t.venue = {
+  id: string;
+  name: string;
+  address: string
+}
+
 type textHtml = Eventbrite_t.textHtml = { text: string; html: string }
 
 type pagination = Eventbrite_t.pagination = {
@@ -9,6 +15,13 @@ type pagination = Eventbrite_t.pagination = {
   page_size: int;
   page_count: int;
   has_more_items: bool
+}
+
+type organizer = Eventbrite_t.organizer = {
+  id: string;
+  name: string;
+  description: textHtml;
+  url: string
 }
 
 type datetime = Eventbrite_t.datetime = {
@@ -25,7 +38,9 @@ type event = Eventbrite_t.event = {
   start: datetime;
   end_: datetime;
   is_series: bool;
-  venue_id: string
+  online_event: bool;
+  venue: venue option;
+  organizer: organizer option
 }
 
 type events = Eventbrite_t.events
@@ -35,19 +50,61 @@ type searchResult = Eventbrite_t.searchResult = {
   events: events
 }
 
-type requestMethod = Eventbrite_t.requestMethod =  Get | Post 
-
-type batchResult = Eventbrite_t.batchResult = { body: string; code: int }
-
-type batchResults = Eventbrite_t.batchResults
-
-type batchRequest = Eventbrite_t.batchRequest = {
-  method_: requestMethod;
-  relative_url: string
-}
-
-type batchInput = Eventbrite_t.batchInput
-
+let write_venue = (
+  Atdgen_codec_runtime.Encode.make (fun (t : venue) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"id"
+          t.id
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"name"
+          t.name
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"address"
+          t.address
+      ]
+    )
+  )
+)
+let read_venue = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          id =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "id"
+            ) json;
+          name =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "name"
+            ) json;
+          address =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "address"
+            ) json;
+      } : venue)
+    )
+  )
+)
 let write_textHtml = (
   Atdgen_codec_runtime.Encode.make (fun (t : textHtml) ->
     (
@@ -171,6 +228,74 @@ let read_pagination = (
     )
   )
 )
+let write_organizer = (
+  Atdgen_codec_runtime.Encode.make (fun (t : organizer) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"id"
+          t.id
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"name"
+          t.name
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            write_textHtml
+            )
+          ~name:"description"
+          t.description
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"url"
+          t.url
+      ]
+    )
+  )
+)
+let read_organizer = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          id =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "id"
+            ) json;
+          name =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "name"
+            ) json;
+          description =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              read_textHtml
+              |> Atdgen_codec_runtime.Decode.field "description"
+            ) json;
+          url =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "url"
+            ) json;
+      } : organizer)
+    )
+  )
+)
 let write_datetime = (
   Atdgen_codec_runtime.Encode.make (fun (t : datetime) ->
     (
@@ -224,6 +349,26 @@ let read_datetime = (
             ) json;
       } : datetime)
     )
+  )
+)
+let write__3 = (
+  Atdgen_codec_runtime.Encode.nullable (
+    write_organizer
+  )
+)
+let read__3 = (
+  Atdgen_codec_runtime.Decode.nullable (
+    read_organizer
+  )
+)
+let write__2 = (
+  Atdgen_codec_runtime.Encode.nullable (
+    write_venue
+  )
+)
+let read__2 = (
+  Atdgen_codec_runtime.Decode.nullable (
+    read_venue
   )
 )
 let write_event = (
@@ -282,10 +427,24 @@ let write_event = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            Atdgen_codec_runtime.Encode.bool
             )
-          ~name:"venue_id"
-          t.venue_id
+          ~name:"online_event"
+          t.online_event
+        ;
+          Atdgen_codec_runtime.Encode.field_o
+            (
+            write_venue
+            )
+          ~name:"venue"
+          t.venue
+        ;
+          Atdgen_codec_runtime.Encode.field_o
+            (
+            write_organizer
+            )
+          ~name:"organizer"
+          t.organizer
       ]
     )
   )
@@ -336,11 +495,23 @@ let read_event = (
               Atdgen_codec_runtime.Decode.bool
               |> Atdgen_codec_runtime.Decode.field "is_series"
             ) json;
-          venue_id =
+          online_event =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
-              |> Atdgen_codec_runtime.Decode.field "venue_id"
+              Atdgen_codec_runtime.Decode.bool
+              |> Atdgen_codec_runtime.Decode.field "online_event"
+            ) json;
+          venue =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              read_venue
+              |> Atdgen_codec_runtime.Decode.fieldOptional "venue"
+            ) json;
+          organizer =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              read_organizer
+              |> Atdgen_codec_runtime.Decode.fieldOptional "organizer"
             ) json;
       } : event)
     )
@@ -403,144 +574,4 @@ let read_searchResult = (
       } : searchResult)
     )
   )
-)
-let write_requestMethod = (
-  Atdgen_codec_runtime.Encode.make (fun (x : requestMethod) -> match x with
-    | Get ->
-    Atdgen_codec_runtime.Encode.constr0 "GET"
-    | Post ->
-    Atdgen_codec_runtime.Encode.constr0 "POST"
-  )
-)
-let read_requestMethod = (
-  Atdgen_codec_runtime.Decode.enum
-  [
-      (
-      "GET"
-      ,
-        `Single (Get)
-      )
-    ;
-      (
-      "POST"
-      ,
-        `Single (Post)
-      )
-  ]
-)
-let write_batchResult = (
-  Atdgen_codec_runtime.Encode.make (fun (t : batchResult) ->
-    (
-    Atdgen_codec_runtime.Encode.obj
-      [
-          Atdgen_codec_runtime.Encode.field
-            (
-            Atdgen_codec_runtime.Encode.string
-            )
-          ~name:"body"
-          t.body
-        ;
-          Atdgen_codec_runtime.Encode.field
-            (
-            Atdgen_codec_runtime.Encode.int
-            )
-          ~name:"code"
-          t.code
-      ]
-    )
-  )
-)
-let read_batchResult = (
-  Atdgen_codec_runtime.Decode.make (fun json ->
-    (
-      ({
-          body =
-            Atdgen_codec_runtime.Decode.decode
-            (
-              Atdgen_codec_runtime.Decode.string
-              |> Atdgen_codec_runtime.Decode.field "body"
-            ) json;
-          code =
-            Atdgen_codec_runtime.Decode.decode
-            (
-              Atdgen_codec_runtime.Decode.int
-              |> Atdgen_codec_runtime.Decode.field "code"
-            ) json;
-      } : batchResult)
-    )
-  )
-)
-let write__3 = (
-  Atdgen_codec_runtime.Encode.list (
-    write_batchResult
-  )
-)
-let read__3 = (
-  Atdgen_codec_runtime.Decode.list (
-    read_batchResult
-  )
-)
-let write_batchResults = (
-  write__3
-)
-let read_batchResults = (
-  read__3
-)
-let write_batchRequest = (
-  Atdgen_codec_runtime.Encode.make (fun (t : batchRequest) ->
-    (
-    Atdgen_codec_runtime.Encode.obj
-      [
-          Atdgen_codec_runtime.Encode.field
-            (
-            write_requestMethod
-            )
-          ~name:"method"
-          t.method_
-        ;
-          Atdgen_codec_runtime.Encode.field
-            (
-            Atdgen_codec_runtime.Encode.string
-            )
-          ~name:"relative_url"
-          t.relative_url
-      ]
-    )
-  )
-)
-let read_batchRequest = (
-  Atdgen_codec_runtime.Decode.make (fun json ->
-    (
-      ({
-          method_ =
-            Atdgen_codec_runtime.Decode.decode
-            (
-              read_requestMethod
-              |> Atdgen_codec_runtime.Decode.field "method"
-            ) json;
-          relative_url =
-            Atdgen_codec_runtime.Decode.decode
-            (
-              Atdgen_codec_runtime.Decode.string
-              |> Atdgen_codec_runtime.Decode.field "relative_url"
-            ) json;
-      } : batchRequest)
-    )
-  )
-)
-let write__2 = (
-  Atdgen_codec_runtime.Encode.list (
-    write_batchRequest
-  )
-)
-let read__2 = (
-  Atdgen_codec_runtime.Decode.list (
-    read_batchRequest
-  )
-)
-let write_batchInput = (
-  write__2
-)
-let read_batchInput = (
-  read__2
 )

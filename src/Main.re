@@ -20,6 +20,7 @@ let fetchEventbrite = (latitude, longitude) => {
          "location.longitude": longitude,
          "location.within": "1mi",
          "sort_by": "date",
+         "expand": "organizer,venue",
        }
        ->Utils.makeQueryString;
 
@@ -50,6 +51,7 @@ let fetchIpApi = () => {
   );
 };
 
+/* Main */
 Js.Promise.(
   fetchIpApi()
   |> then_(result => {
