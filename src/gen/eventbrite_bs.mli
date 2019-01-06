@@ -1,10 +1,18 @@
 (* Auto-generated from "eventbrite.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
+type address = Eventbrite_t.address = {
+  address_1: string;
+  address_2: string option;
+  city: string;
+  region: string;
+  postal_code: string
+}
+
 type venue = Eventbrite_t.venue = {
   id: string;
   name: string;
-  address: string
+  address: address
 }
 
 type textHtml = Eventbrite_t.textHtml = { text: string; html: string }
@@ -39,8 +47,8 @@ type event = Eventbrite_t.event = {
   end_: datetime;
   is_series: bool;
   online_event: bool;
-  venue: venue option;
-  organizer: organizer option
+  venue: venue;
+  organizer: organizer
 }
 
 type events = Eventbrite_t.events
@@ -49,6 +57,10 @@ type searchResult = Eventbrite_t.searchResult = {
   pagination: pagination;
   events: events
 }
+
+val read_address :  address Atdgen_codec_runtime.Decode.t
+
+val write_address :  address Atdgen_codec_runtime.Encode.t
 
 val read_venue :  venue Atdgen_codec_runtime.Decode.t
 

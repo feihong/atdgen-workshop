@@ -1,7 +1,15 @@
 (* Auto-generated from "eventbrite.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
-type venue = { id: string; name: string; address: string }
+type address = {
+  address_1: string;
+  address_2: string option;
+  city: string;
+  region: string;
+  postal_code: string
+}
+
+type venue = { id: string; name: string; address: address }
 
 type textHtml = { text: string; html: string }
 
@@ -31,8 +39,8 @@ type event = {
   end_: datetime;
   is_series: bool;
   online_event: bool;
-  venue: venue option;
-  organizer: organizer option
+  venue: venue;
+  organizer: organizer
 }
 
 type events = event list

@@ -67,4 +67,5 @@ Js.Promise.(
   |> then_(result =>
        Js.log(result.Eventbrite_t.events->List.toArray)->resolve
      )
+  |> catch(err => Js.log2("Caught error:", err)->resolve)
 );

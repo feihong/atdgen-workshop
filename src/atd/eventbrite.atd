@@ -27,14 +27,14 @@ type event = {
   end_ <json name="end">: datetime;
   is_series: bool;
   online_event: bool;
-  ?venue: venue nullable;
-  ?organizer: organizer nullable;
+  venue: venue;
+  organizer: organizer;
 }
 
 type venue = {
   id: string;
   name: string;
-  address: string;
+  address: address;
 }
 
 type organizer = {
@@ -42,6 +42,14 @@ type organizer = {
   name: string;
   description: textHtml;
   url: string;
+}
+
+type address = {
+  address_1: string;
+  address_2: string nullable;
+  city: string;
+  region: string;
+  postal_code: string;
 }
 
 type textHtml = {

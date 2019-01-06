@@ -1,10 +1,18 @@
 (* Auto-generated from "eventbrite.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
+type address = Eventbrite_t.address = {
+  address_1: string;
+  address_2: string option;
+  city: string;
+  region: string;
+  postal_code: string
+}
+
 type venue = Eventbrite_t.venue = {
   id: string;
   name: string;
-  address: string
+  address: address
 }
 
 type textHtml = Eventbrite_t.textHtml = { text: string; html: string }
@@ -39,8 +47,8 @@ type event = Eventbrite_t.event = {
   end_: datetime;
   is_series: bool;
   online_event: bool;
-  venue: venue option;
-  organizer: organizer option
+  venue: venue;
+  organizer: organizer
 }
 
 type events = Eventbrite_t.events
@@ -50,6 +58,97 @@ type searchResult = Eventbrite_t.searchResult = {
   events: events
 }
 
+let write__2 = (
+  Atdgen_codec_runtime.Encode.nullable (
+    Atdgen_codec_runtime.Encode.string
+  )
+)
+let read__2 = (
+  Atdgen_codec_runtime.Decode.nullable (
+    Atdgen_codec_runtime.Decode.string
+  )
+)
+let write_address = (
+  Atdgen_codec_runtime.Encode.make (fun (t : address) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"address_1"
+          t.address_1
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            write__2
+            )
+          ~name:"address_2"
+          t.address_2
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"city"
+          t.city
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"region"
+          t.region
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"postal_code"
+          t.postal_code
+      ]
+    )
+  )
+)
+let read_address = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          address_1 =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "address_1"
+            ) json;
+          address_2 =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              read__2
+              |> Atdgen_codec_runtime.Decode.field "address_2"
+            ) json;
+          city =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "city"
+            ) json;
+          region =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "region"
+            ) json;
+          postal_code =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "postal_code"
+            ) json;
+      } : address)
+    )
+  )
+)
 let write_venue = (
   Atdgen_codec_runtime.Encode.make (fun (t : venue) ->
     (
@@ -71,7 +170,7 @@ let write_venue = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write_address
             )
           ~name:"address"
           t.address
@@ -98,7 +197,7 @@ let read_venue = (
           address =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read_address
               |> Atdgen_codec_runtime.Decode.field "address"
             ) json;
       } : venue)
@@ -351,26 +450,6 @@ let read_datetime = (
     )
   )
 )
-let write__3 = (
-  Atdgen_codec_runtime.Encode.nullable (
-    write_organizer
-  )
-)
-let read__3 = (
-  Atdgen_codec_runtime.Decode.nullable (
-    read_organizer
-  )
-)
-let write__2 = (
-  Atdgen_codec_runtime.Encode.nullable (
-    write_venue
-  )
-)
-let read__2 = (
-  Atdgen_codec_runtime.Decode.nullable (
-    read_venue
-  )
-)
 let write_event = (
   Atdgen_codec_runtime.Encode.make (fun (t : event) ->
     (
@@ -432,14 +511,14 @@ let write_event = (
           ~name:"online_event"
           t.online_event
         ;
-          Atdgen_codec_runtime.Encode.field_o
+          Atdgen_codec_runtime.Encode.field
             (
             write_venue
             )
           ~name:"venue"
           t.venue
         ;
-          Atdgen_codec_runtime.Encode.field_o
+          Atdgen_codec_runtime.Encode.field
             (
             write_organizer
             )
@@ -505,13 +584,13 @@ let read_event = (
             Atdgen_codec_runtime.Decode.decode
             (
               read_venue
-              |> Atdgen_codec_runtime.Decode.fieldOptional "venue"
+              |> Atdgen_codec_runtime.Decode.field "venue"
             ) json;
           organizer =
             Atdgen_codec_runtime.Decode.decode
             (
               read_organizer
-              |> Atdgen_codec_runtime.Decode.fieldOptional "organizer"
+              |> Atdgen_codec_runtime.Decode.field "organizer"
             ) json;
       } : event)
     )
