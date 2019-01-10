@@ -26,3 +26,16 @@ module Datetime = {
   let wrap = Js.Date.fromString;
   let unwrap = Js.Date.toUTCString;
 }
+
+module ExternalId = {
+  type t = {
+    source: string,
+    id: string,
+  };
+  let wrap = s =>
+    switch (s->Js.String.split(":", _)) {
+    | [|source, id|] => {source, id}
+    | _ => failwith("external id has incorrect format: " ++ s)
+    };
+  let unwrap = ({source, id}) => source ++ ":" ++ id;
+}
