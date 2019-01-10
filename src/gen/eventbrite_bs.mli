@@ -38,7 +38,7 @@ type organizer = Eventbrite_t.organizer = {
 type datetime = Eventbrite_t.datetime = {
   timezone: string;
   local: string;
-  utc: string
+  utc: Wrap.Datetime.t
 }
 
 type event = Eventbrite_t.event = {

@@ -60,5 +60,5 @@ type textHtml = {
 type datetime = {
   timezone: string;
   local: string;
-  utc: string;
+  utc: string wrap <ocaml module="Wrap.Datetime">;
 }

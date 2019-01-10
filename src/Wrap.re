@@ -20,3 +20,9 @@ module VenueId =
 
 module OrganizerId =
   MakeId({});
+
+module Datetime = {
+  type t = Js.Date.t;
+  let wrap = Js.Date.fromString;
+  let unwrap = Js.Date.toUTCString;
+}

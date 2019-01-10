@@ -38,7 +38,7 @@ type organizer = Eventbrite_t.organizer = {
 type datetime = Eventbrite_t.datetime = {
   timezone: string;
   local: string;
-  utc: string
+  utc: Wrap.Datetime.t
 }
 
 type event = Eventbrite_t.event = {
@@ -416,6 +416,15 @@ let read_organizer = (
     )
   )
 )
+let write__6 = (
+    Atdgen_codec_runtime.Encode.string
+  |> Atdgen_codec_runtime.Encode.contramap (Wrap.Datetime.unwrap)
+)
+let read__6 = (
+  (
+    Atdgen_codec_runtime.Decode.string
+  ) |> (Atdgen_codec_runtime.Decode.map (Wrap.Datetime.wrap))
+)
 let write_datetime = (
   Atdgen_codec_runtime.Encode.make (fun (t : datetime) ->
     (
@@ -437,7 +446,7 @@ let write_datetime = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__6
             )
           ~name:"utc"
           t.utc
@@ -464,7 +473,7 @@ let read_datetime = (
           utc =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__6
               |> Atdgen_codec_runtime.Decode.field "utc"
             ) json;
       } : datetime)

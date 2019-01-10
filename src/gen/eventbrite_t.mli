@@ -28,7 +28,7 @@ type organizer = {
   url: string
 }
 
-type datetime = { timezone: string; local: string; utc: string }
+type datetime = { timezone: string; local: string; utc: Wrap.Datetime.t }
 
 type event = {
   id: Wrap.EventId.t;
