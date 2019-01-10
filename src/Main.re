@@ -52,9 +52,9 @@ let fetchIpApi = () => {
 };
 
 /* Main */
-Js.Promise.(
+JsPromise.(
   fetchIpApi()
-  |> then_(result => {
+  ->then_(result => {
        Printf.sprintf(
          "You are in %s, %s, %s",
          result.Ipapi_t.city,
@@ -64,8 +64,8 @@ Js.Promise.(
        ->Js.log;
        fetchEventbrite(result.lat, result.lon);
      })
-  |> then_(result =>
+  ->then_(result =>
        Js.log(result.Eventbrite_t.events->List.toArray)->resolve
      )
-  |> catch(err => Js.log2("Caught error:", err)->resolve)
+  ->catch(err => Js.log2("Caught error:", err)->resolve)
 );
