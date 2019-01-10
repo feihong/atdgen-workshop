@@ -19,7 +19,7 @@ type pagination = {
 type events = event list
 
 type event = {
-  id: string;
+  id: string wrap <ocaml module="Wrap.EventId">;
   name: textHtml;
   description: textHtml;
   url: string;
@@ -32,13 +32,13 @@ type event = {
 }
 
 type venue = {
-  id: string;
-  name: string;
+  id: string wrap <ocaml module="Wrap.VenueId">;
+  name: string nullable;
   address: address;
 }
 
 type organizer = {
-  id: string;
+  id: string wrap <ocaml module="Wrap.OrganizerId">;
   name: string;
   description: textHtml;
   url: string;
@@ -47,14 +47,14 @@ type organizer = {
 type address = {
   address_1: string;
   address_2: string nullable;
-  city: string;
-  region: string;
-  postal_code: string;
+  city: string nullable;
+  region: string nullable;
+  postal_code: string nullable;
 }
 
 type textHtml = {
-  text: string;
-  html: string;
+  text: string nullable;
+  html: string nullable;
 }
 
 type datetime = {
@@ -62,22 +62,3 @@ type datetime = {
   local: string;
   utc: string;
 }
-
-(* type batchInput = batchRequest list
-
-type batchRequest = {
-  method_ <json name="method">: requestMethod;
-  relative_url: string;
-}
-
-type requestMethod = [
-  | Get <json name="GET">
-  | Post <json name="POST">
-] <ocaml repr="classic">
-
-type batchResults = batchResult list
-
-type batchResult = {
-  body: string;
-  code: int;
-} *)

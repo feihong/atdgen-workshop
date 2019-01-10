@@ -4,18 +4,21 @@
 type address = Eventbrite_t.address = {
   address_1: string;
   address_2: string option;
-  city: string;
-  region: string;
-  postal_code: string
+  city: string option;
+  region: string option;
+  postal_code: string option
 }
 
 type venue = Eventbrite_t.venue = {
-  id: string;
-  name: string;
+  id: Wrap.VenueId.t;
+  name: string option;
   address: address
 }
 
-type textHtml = Eventbrite_t.textHtml = { text: string; html: string }
+type textHtml = Eventbrite_t.textHtml = {
+  text: string option;
+  html: string option
+}
 
 type pagination = Eventbrite_t.pagination = {
   object_count: int;
@@ -26,7 +29,7 @@ type pagination = Eventbrite_t.pagination = {
 }
 
 type organizer = Eventbrite_t.organizer = {
-  id: string;
+  id: Wrap.OrganizerId.t;
   name: string;
   description: textHtml;
   url: string
@@ -39,7 +42,7 @@ type datetime = Eventbrite_t.datetime = {
 }
 
 type event = Eventbrite_t.event = {
-  id: string;
+  id: Wrap.EventId.t;
   name: textHtml;
   description: textHtml;
   url: string;
@@ -58,12 +61,12 @@ type searchResult = Eventbrite_t.searchResult = {
   events: events
 }
 
-let write__2 = (
+let write__4 = (
   Atdgen_codec_runtime.Encode.nullable (
     Atdgen_codec_runtime.Encode.string
   )
 )
-let read__2 = (
+let read__4 = (
   Atdgen_codec_runtime.Decode.nullable (
     Atdgen_codec_runtime.Decode.string
   )
@@ -82,28 +85,28 @@ let write_address = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__2
+            write__4
             )
           ~name:"address_2"
           t.address_2
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"city"
           t.city
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"region"
           t.region
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"postal_code"
           t.postal_code
@@ -124,30 +127,39 @@ let read_address = (
           address_2 =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__2
+              read__4
               |> Atdgen_codec_runtime.Decode.field "address_2"
             ) json;
           city =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "city"
             ) json;
           region =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "region"
             ) json;
           postal_code =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "postal_code"
             ) json;
       } : address)
     )
   )
+)
+let write__3 = (
+    Atdgen_codec_runtime.Encode.string
+  |> Atdgen_codec_runtime.Encode.contramap (Wrap.VenueId.unwrap)
+)
+let read__3 = (
+  (
+    Atdgen_codec_runtime.Decode.string
+  ) |> (Atdgen_codec_runtime.Decode.map (Wrap.VenueId.wrap))
 )
 let write_venue = (
   Atdgen_codec_runtime.Encode.make (fun (t : venue) ->
@@ -156,14 +168,14 @@ let write_venue = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__3
             )
           ~name:"id"
           t.id
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"name"
           t.name
@@ -185,13 +197,13 @@ let read_venue = (
           id =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__3
               |> Atdgen_codec_runtime.Decode.field "id"
             ) json;
           name =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "name"
             ) json;
           address =
@@ -211,14 +223,14 @@ let write_textHtml = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"text"
           t.text
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"html"
           t.html
@@ -233,13 +245,13 @@ let read_textHtml = (
           text =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "text"
             ) json;
           html =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "html"
             ) json;
       } : textHtml)
@@ -327,6 +339,15 @@ let read_pagination = (
     )
   )
 )
+let write__5 = (
+    Atdgen_codec_runtime.Encode.string
+  |> Atdgen_codec_runtime.Encode.contramap (Wrap.OrganizerId.unwrap)
+)
+let read__5 = (
+  (
+    Atdgen_codec_runtime.Decode.string
+  ) |> (Atdgen_codec_runtime.Decode.map (Wrap.OrganizerId.wrap))
+)
 let write_organizer = (
   Atdgen_codec_runtime.Encode.make (fun (t : organizer) ->
     (
@@ -334,7 +355,7 @@ let write_organizer = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__5
             )
           ~name:"id"
           t.id
@@ -370,7 +391,7 @@ let read_organizer = (
           id =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__5
               |> Atdgen_codec_runtime.Decode.field "id"
             ) json;
           name =
@@ -450,6 +471,15 @@ let read_datetime = (
     )
   )
 )
+let write__2 = (
+    Atdgen_codec_runtime.Encode.string
+  |> Atdgen_codec_runtime.Encode.contramap (Wrap.EventId.unwrap)
+)
+let read__2 = (
+  (
+    Atdgen_codec_runtime.Decode.string
+  ) |> (Atdgen_codec_runtime.Decode.map (Wrap.EventId.wrap))
+)
 let write_event = (
   Atdgen_codec_runtime.Encode.make (fun (t : event) ->
     (
@@ -457,7 +487,7 @@ let write_event = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__2
             )
           ~name:"id"
           t.id
@@ -535,7 +565,7 @@ let read_event = (
           id =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__2
               |> Atdgen_codec_runtime.Decode.field "id"
             ) json;
           name =

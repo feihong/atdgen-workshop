@@ -18,6 +18,6 @@
     "main": "node src/Main.bs.js",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
-    "atdgen": "source atdgen.sh"
+    "gen": "source atdgen.sh"
   }
 }

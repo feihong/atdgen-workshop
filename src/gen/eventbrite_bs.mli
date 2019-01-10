@@ -4,18 +4,21 @@
 type address = Eventbrite_t.address = {
   address_1: string;
   address_2: string option;
-  city: string;
-  region: string;
-  postal_code: string
+  city: string option;
+  region: string option;
+  postal_code: string option
 }
 
 type venue = Eventbrite_t.venue = {
-  id: string;
-  name: string;
+  id: Wrap.VenueId.t;
+  name: string option;
   address: address
 }
 
-type textHtml = Eventbrite_t.textHtml = { text: string; html: string }
+type textHtml = Eventbrite_t.textHtml = {
+  text: string option;
+  html: string option
+}
 
 type pagination = Eventbrite_t.pagination = {
   object_count: int;
@@ -26,7 +29,7 @@ type pagination = Eventbrite_t.pagination = {
 }
 
 type organizer = Eventbrite_t.organizer = {
-  id: string;
+  id: Wrap.OrganizerId.t;
   name: string;
   description: textHtml;
   url: string
@@ -39,7 +42,7 @@ type datetime = Eventbrite_t.datetime = {
 }
 
 type event = Eventbrite_t.event = {
-  id: string;
+  id: Wrap.EventId.t;
   name: textHtml;
   description: textHtml;
   url: string;

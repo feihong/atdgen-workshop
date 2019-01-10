@@ -4,14 +4,14 @@
 type address = {
   address_1: string;
   address_2: string option;
-  city: string;
-  region: string;
-  postal_code: string
+  city: string option;
+  region: string option;
+  postal_code: string option
 }
 
-type venue = { id: string; name: string; address: address }
+type venue = { id: Wrap.VenueId.t; name: string option; address: address }
 
-type textHtml = { text: string; html: string }
+type textHtml = { text: string option; html: string option }
 
 type pagination = {
   object_count: int;
@@ -22,7 +22,7 @@ type pagination = {
 }
 
 type organizer = {
-  id: string;
+  id: Wrap.OrganizerId.t;
   name: string;
   description: textHtml;
   url: string
@@ -31,7 +31,7 @@ type organizer = {
 type datetime = { timezone: string; local: string; utc: string }
 
 type event = {
-  id: string;
+  id: Wrap.EventId.t;
   name: textHtml;
   description: textHtml;
   url: string;
