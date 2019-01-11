@@ -1,9 +1,5 @@
 include Belt;
 
-module Utils = {
-  let makeQueryString = params => UrlSearchParams.(make(params)->toString);
-};
-
 module JsPromise = {
   include Js.Promise;
 
@@ -31,4 +27,23 @@ module NodeFs = {
   });
 
   [@bs.module "fs"] external statSync: string => stats = "";
+};
+
+
+module Utils = {
+  let makeQueryString = params => UrlSearchParams.(make(params)->toString);
+
+  /* return true if given file exists and less than 6 hours old */
+  let isCached = filename =>
+    !NodeFs.existsSync(filename) ? false : {
+      let mtime = NodeFs.statSync(filename)##mtime->Js.Date.getTime;
+      let delta = Js.Date.now() -. mtime;
+      delta < 6. *. 3600. *. 1000.
+    };
+
+  let writeCacheFile = (filename, json) => {
+    let text = json->Js.Json.stringifyWithSpace(2);
+    NodeFs.writeFileAsUtf8Sync(filename, text);
+    JsPromise.resolve(json);
+  };
 };

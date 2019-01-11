@@ -24,7 +24,7 @@ let fetchEventbrite = (latitude, longitude) => {
 
   JsPromise.(
     (
-      if (NodeFs.existsSync(filename)) {
+      if (Utils.isCached(filename)) {
         NodeFs.readFileAsUtf8Sync(filename)->Js.Json.parseExn->resolve;
       } else {
         Fetch.fetchWithInit(
@@ -36,11 +36,7 @@ let fetchEventbrite = (latitude, longitude) => {
           )
         )
         ->then_(Fetch.Response.json)
-        ->then_(json => {
-             let text = json->Js.Json.stringifyWithSpace(2);
-             NodeFs.writeFileAsUtf8Sync(filename, text);
-             resolve(json);
-           });
+        ->then_(Utils.writeCacheFile(filename))
       }
     )
     ->then_(json => json->Eventbrite_bs.read_searchResult->resolve)
