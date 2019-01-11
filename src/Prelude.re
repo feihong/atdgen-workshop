@@ -19,3 +19,16 @@ module JsPromise = {
       fn(acc, head)->then_(newAcc => reduce(rest, newAcc, fn))
     };
 };
+
+module NodeFs = {
+  include Node.Fs;
+
+  type stats = Js.t({
+    .
+    size: int,
+    mtime: Js.Date.t,
+    ctime: Js.Date.t,
+  });
+
+  [@bs.module "fs"] external statSync: string => stats = "";
+};

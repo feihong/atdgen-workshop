@@ -3,7 +3,7 @@ open Prelude;
 
 let secrets =
   try (
-    Node.Fs.readFileAsUtf8Sync("./secrets.json")
+    NodeFs.readFileAsUtf8Sync("./secrets.json")
     ->Js.Json.parseExn
     ->Config_bs.read_secrets
   ) {
@@ -24,8 +24,8 @@ let fetchEventbrite = (latitude, longitude) => {
 
   JsPromise.(
     (
-      if (Node.Fs.existsSync(filename)) {
-        Node.Fs.readFileAsUtf8Sync(filename)->Js.Json.parseExn->resolve;
+      if (NodeFs.existsSync(filename)) {
+        NodeFs.readFileAsUtf8Sync(filename)->Js.Json.parseExn->resolve;
       } else {
         Fetch.fetchWithInit(
           url,
@@ -38,7 +38,7 @@ let fetchEventbrite = (latitude, longitude) => {
         ->then_(Fetch.Response.json)
         ->then_(json => {
              let text = json->Js.Json.stringifyWithSpace(2);
-             Node.Fs.writeFileAsUtf8Sync(filename, text);
+             NodeFs.writeFileAsUtf8Sync(filename, text);
              resolve(json);
            });
       }
