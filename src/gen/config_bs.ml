@@ -1,10 +1,7 @@
 (* Auto-generated from "config.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
-type secrets = Config_t.secrets = {
-  eventbriteToken: string;
-  facebookToken: string
-}
+type secrets = Config_t.secrets = { eventbriteToken: string }
 
 type config = Config_t.config = {
   keywords: string list;
@@ -23,13 +20,6 @@ let write_secrets = (
             )
           ~name:"eventbriteToken"
           t.eventbriteToken
-        ;
-          Atdgen_codec_runtime.Encode.field
-            (
-            Atdgen_codec_runtime.Encode.string
-            )
-          ~name:"facebookToken"
-          t.facebookToken
       ]
     )
   )
@@ -43,12 +33,6 @@ let read_secrets = (
             (
               Atdgen_codec_runtime.Decode.string
               |> Atdgen_codec_runtime.Decode.field "eventbriteToken"
-            ) json;
-          facebookToken =
-            Atdgen_codec_runtime.Decode.decode
-            (
-              Atdgen_codec_runtime.Decode.string
-              |> Atdgen_codec_runtime.Decode.field "facebookToken"
             ) json;
       } : secrets)
     )

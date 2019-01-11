@@ -7,7 +7,7 @@ let secrets =
     ->Js.Json.parseExn
     ->Config_bs.read_secrets
   ) {
-  | _ => {eventbriteToken: "", facebookToken: ""}
+  | _ => {eventbriteToken: ""}
   };
 
 let fetchEventbrite = (latitude, longitude) => {
@@ -15,11 +15,9 @@ let fetchEventbrite = (latitude, longitude) => {
   let url =
     "https://www.eventbriteapi.com/v3/events/search?"
     ++ {
-         "token": secrets.eventbriteToken,
          "location.latitude": latitude,
          "location.longitude": longitude,
          "location.within": "1mi",
-         /* "sort_by": "date", */
          "expand": "organizer,venue",
        }
        ->Utils.makeQueryString;
@@ -29,7 +27,14 @@ let fetchEventbrite = (latitude, longitude) => {
       if (Node.Fs.existsSync(filename)) {
         Node.Fs.readFileAsUtf8Sync(filename)->Js.Json.parseExn->resolve;
       } else {
-        Fetch.fetch(url)
+        Fetch.fetchWithInit(
+          url,
+          Fetch.RequestInit.make(
+            ~method_=Fetch.Post,
+            ~headers=Fetch.HeadersInit.make({"Authorization": "Bearer " ++ secrets.eventbriteToken}),
+            (),
+          )
+        )
         ->then_(Fetch.Response.json)
         ->then_(json => {
              let text = json->Js.Json.stringifyWithSpace(2);

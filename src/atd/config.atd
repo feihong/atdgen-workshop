@@ -1,6 +1,5 @@
 type secrets = {
   eventbriteToken: string;
-  facebookToken: string;
 }
 
 type config = {

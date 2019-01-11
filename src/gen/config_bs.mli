@@ -1,10 +1,7 @@
 (* Auto-generated from "config.atd" *)
               [@@@ocaml.warning "-27-32-35-39"]
 
-type secrets = Config_t.secrets = {
-  eventbriteToken: string;
-  facebookToken: string
-}
+type secrets = Config_t.secrets = { eventbriteToken: string }
 
 type config = Config_t.config = {
   keywords: string list;
