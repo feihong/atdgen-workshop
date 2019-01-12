@@ -5,6 +5,7 @@ function build {
 
 cd src
 build eventbrite
+build event
 build config
 build ipapi
 yarn build

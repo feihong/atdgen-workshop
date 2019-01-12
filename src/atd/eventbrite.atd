@@ -40,7 +40,7 @@ type venue = {
 type organizer = {
   id: string wrap <ocaml module="Wrap.OrganizerId">;
   name: string;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string;
 }
 
@@ -53,6 +53,11 @@ type address = {
 }
 
 type textHtml = {
+  text: string;
+  html: string;
+}
+
+type textHtmlNullable = {
   text: string nullable;
   html: string nullable;
 }

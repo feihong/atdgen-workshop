@@ -1,6 +1,7 @@
 open Prelude;
+module ExternalId = Wrap.ExternalId;
 
-let fetch = (latitude, longitude) => {
+let fetchSource = (latitude, longitude) => {
   let filename = "eventbrite.json";
   let url =
     "https://www.eventbriteapi.com/v3/events/search?"
@@ -31,4 +32,40 @@ let fetch = (latitude, longitude) => {
     )
     ->then_(json => json->Eventbrite_bs.read_searchResult->resolve)
   );
+};
+
+let convert = ({Eventbrite_t.id, name, description, url, start, end_, is_series, organizer, venue}) =>
+  {
+    Event_t.externalId: {ExternalId.source: "eventbrite", id: id->Wrap.EventId.unwrap},
+    name: name.text,
+    description: description.text,
+    url,
+    start: start.utc,
+    end_: Some(end_.utc),
+    isSeries: is_series,
+    organizer: {
+      name: organizer.name,
+      description: organizer.description.text,
+      url: organizer.url,
+    },
+    venue: {
+      name: venue.name,
+      address: {
+        let a = venue.address;
+        {
+          address1: a.address_1,
+          address2: a.address_2,
+          city: a.city,
+          region: a.region,
+          postalCode: a.postal_code,
+        }
+      }
+    }
+  };
+
+let fetch (latitude, longitude) = {
+  JsPromise.(
+    fetchSource(latitude, longitude)
+    ->then_(results => results.events->List.map(convert)->resolve)
+  )
 };

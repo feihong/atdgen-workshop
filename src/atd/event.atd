@@ -1,34 +1,34 @@
-type datetime = string wrap <ocaml module="Wrap.Datetime">;
+type datetime = string wrap <ocaml module="Wrap.Datetime">
 
 type event = {
-  external_id: string wrap <ocaml module="Wrap.ExternalId">;
+  externalId: string wrap <ocaml module="Wrap.ExternalId">;
   name: string;
   description: string;
   url: string;
   start: datetime;
-  end_ <json name="end">: datetime;
+  end_ <json name="end">: datetime nullable;
   isSeries: bool;
   venue: venue;
   organizer: organizer;
 }
 
-type events = event list;
+type events = event list
 
 type venue = {
-  name: string;
+  name: string nullable;
   address: address;
 }
 
 type organizer = {
   name: string;
-  description: string;
   url: string;
+  description: string nullable;
 }
 
 type address = {
   address1: string;
   address2: string nullable;
-  city: string;
-  region: string;
-  postal_code: string;
+  city: string nullable;
+  region: string nullable;
+  postalCode: string nullable;
 }

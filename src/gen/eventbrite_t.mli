@@ -11,7 +11,9 @@ type address = {
 
 type venue = { id: Wrap.VenueId.t; name: string option; address: address }
 
-type textHtml = { text: string option; html: string option }
+type textHtmlNullable = { text: string option; html: string option }
+
+type textHtml = { text: string; html: string }
 
 type pagination = {
   object_count: int;
@@ -24,7 +26,7 @@ type pagination = {
 type organizer = {
   id: Wrap.OrganizerId.t;
   name: string;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string
 }
 

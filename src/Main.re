@@ -23,8 +23,8 @@ JsPromise.(
        ->Js.log;
        Eventbrite.fetch(result.lat, result.lon);
      })
-  ->then_(result =>
-       Js.log(result.Eventbrite_t.events->List.toArray)->resolve
+  ->then_(events =>
+       Js.log(events->List.toArray)->resolve
      )
   ->catch(err => Js.log2("Caught error:", err)->resolve)
 );

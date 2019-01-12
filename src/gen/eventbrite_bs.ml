@@ -15,10 +15,12 @@ type venue = Eventbrite_t.venue = {
   address: address
 }
 
-type textHtml = Eventbrite_t.textHtml = {
+type textHtmlNullable = Eventbrite_t.textHtmlNullable = {
   text: string option;
   html: string option
 }
+
+type textHtml = Eventbrite_t.textHtml = { text: string; html: string }
 
 type pagination = Eventbrite_t.pagination = {
   object_count: int;
@@ -31,7 +33,7 @@ type pagination = Eventbrite_t.pagination = {
 type organizer = Eventbrite_t.organizer = {
   id: Wrap.OrganizerId.t;
   name: string;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string
 }
 
@@ -216,8 +218,8 @@ let read_venue = (
     )
   )
 )
-let write_textHtml = (
-  Atdgen_codec_runtime.Encode.make (fun (t : textHtml) ->
+let write_textHtmlNullable = (
+  Atdgen_codec_runtime.Encode.make (fun (t : textHtmlNullable) ->
     (
     Atdgen_codec_runtime.Encode.obj
       [
@@ -238,7 +240,7 @@ let write_textHtml = (
     )
   )
 )
-let read_textHtml = (
+let read_textHtmlNullable = (
   Atdgen_codec_runtime.Decode.make (fun json ->
     (
       ({
@@ -252,6 +254,48 @@ let read_textHtml = (
             Atdgen_codec_runtime.Decode.decode
             (
               read__4
+              |> Atdgen_codec_runtime.Decode.field "html"
+            ) json;
+      } : textHtmlNullable)
+    )
+  )
+)
+let write_textHtml = (
+  Atdgen_codec_runtime.Encode.make (fun (t : textHtml) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"text"
+          t.text
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"html"
+          t.html
+      ]
+    )
+  )
+)
+let read_textHtml = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          text =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "text"
+            ) json;
+          html =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
               |> Atdgen_codec_runtime.Decode.field "html"
             ) json;
       } : textHtml)
@@ -369,7 +413,7 @@ let write_organizer = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write_textHtml
+            write_textHtmlNullable
             )
           ~name:"description"
           t.description
@@ -403,7 +447,7 @@ let read_organizer = (
           description =
             Atdgen_codec_runtime.Decode.decode
             (
-              read_textHtml
+              read_textHtmlNullable
               |> Atdgen_codec_runtime.Decode.field "description"
             ) json;
           url =
