@@ -3,7 +3,14 @@ https://www.eventbrite.com/platform/api
 
 *)
 
-type searchResult = {
+type searchInput = {
+  latitude <json name="location.latitude">: float;
+  longitude <json name="location.longitude">: float;
+  within <json name="location.within">: string;
+  expand: string;
+}
+
+type searchOutput = {
   pagination: pagination;
   events: events;
 }

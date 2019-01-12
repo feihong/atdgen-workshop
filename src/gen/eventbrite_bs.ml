@@ -58,9 +58,16 @@ type event = Eventbrite_t.event = {
 
 type events = Eventbrite_t.events
 
-type searchResult = Eventbrite_t.searchResult = {
+type searchOutput = Eventbrite_t.searchOutput = {
   pagination: pagination;
   events: events
+}
+
+type searchInput = Eventbrite_t.searchInput = {
+  latitude: float;
+  longitude: float;
+  within: string;
+  expand: string
 }
 
 let write__4 = (
@@ -695,8 +702,8 @@ let write_events = (
 let read_events = (
   read__1
 )
-let write_searchResult = (
-  Atdgen_codec_runtime.Encode.make (fun (t : searchResult) ->
+let write_searchOutput = (
+  Atdgen_codec_runtime.Encode.make (fun (t : searchOutput) ->
     (
     Atdgen_codec_runtime.Encode.obj
       [
@@ -717,7 +724,7 @@ let write_searchResult = (
     )
   )
 )
-let read_searchResult = (
+let read_searchOutput = (
   Atdgen_codec_runtime.Decode.make (fun json ->
     (
       ({
@@ -733,7 +740,75 @@ let read_searchResult = (
               read_events
               |> Atdgen_codec_runtime.Decode.field "events"
             ) json;
-      } : searchResult)
+      } : searchOutput)
+    )
+  )
+)
+let write_searchInput = (
+  Atdgen_codec_runtime.Encode.make (fun (t : searchInput) ->
+    (
+    Atdgen_codec_runtime.Encode.obj
+      [
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.float
+            )
+          ~name:"location.latitude"
+          t.latitude
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.float
+            )
+          ~name:"location.longitude"
+          t.longitude
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"location.within"
+          t.within
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.string
+            )
+          ~name:"expand"
+          t.expand
+      ]
+    )
+  )
+)
+let read_searchInput = (
+  Atdgen_codec_runtime.Decode.make (fun json ->
+    (
+      ({
+          latitude =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.float
+              |> Atdgen_codec_runtime.Decode.field "location.latitude"
+            ) json;
+          longitude =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.float
+              |> Atdgen_codec_runtime.Decode.field "location.longitude"
+            ) json;
+          within =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "location.within"
+            ) json;
+          expand =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.string
+              |> Atdgen_codec_runtime.Decode.field "expand"
+            ) json;
+      } : searchInput)
     )
   )
 )

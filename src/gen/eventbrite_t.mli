@@ -47,4 +47,11 @@ type event = {
 
 type events = event list
 
-type searchResult = { pagination: pagination; events: events }
+type searchOutput = { pagination: pagination; events: events }
+
+type searchInput = {
+  latitude: float;
+  longitude: float;
+  within: string;
+  expand: string
+}

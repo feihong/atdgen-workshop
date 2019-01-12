@@ -6,12 +6,14 @@ let fetchSource = (latitude, longitude) => {
   let url =
     "https://www.eventbriteapi.com/v3/events/search?"
     ++ {
-         "location.latitude": latitude,
-         "location.longitude": longitude,
-         "location.within": "1mi",
-         "expand": "organizer,venue",
+         Eventbrite_t.latitude,
+         longitude,
+         within: "1mi",
+         expand: "organizer,venue",
        }
+       ->Eventbrite_bs.write_searchInput
        ->Utils.makeQueryString;
+  Js.log(url);
 
   JsPromise.(
     Fetch.fetchWithInit(
@@ -27,7 +29,7 @@ let fetchSource = (latitude, longitude) => {
     )
     ->then_(Fetch.Response.json)
     ->then_(Utils.writeCacheFile(~filename))
-    ->then_(json => json->Eventbrite_bs.read_searchResult->resolve)
+    ->then_(json => json->Eventbrite_bs.read_searchOutput->resolve)
   );
 };
 

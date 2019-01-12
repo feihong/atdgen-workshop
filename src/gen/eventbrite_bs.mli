@@ -58,9 +58,16 @@ type event = Eventbrite_t.event = {
 
 type events = Eventbrite_t.events
 
-type searchResult = Eventbrite_t.searchResult = {
+type searchOutput = Eventbrite_t.searchOutput = {
   pagination: pagination;
   events: events
+}
+
+type searchInput = Eventbrite_t.searchInput = {
+  latitude: float;
+  longitude: float;
+  within: string;
+  expand: string
 }
 
 val read_address :  address Atdgen_codec_runtime.Decode.t
@@ -99,7 +106,11 @@ val read_events :  events Atdgen_codec_runtime.Decode.t
 
 val write_events :  events Atdgen_codec_runtime.Encode.t
 
-val read_searchResult :  searchResult Atdgen_codec_runtime.Decode.t
+val read_searchOutput :  searchOutput Atdgen_codec_runtime.Decode.t
 
-val write_searchResult :  searchResult Atdgen_codec_runtime.Encode.t
+val write_searchOutput :  searchOutput Atdgen_codec_runtime.Encode.t
+
+val read_searchInput :  searchInput Atdgen_codec_runtime.Decode.t
+
+val write_searchInput :  searchInput Atdgen_codec_runtime.Encode.t
 
