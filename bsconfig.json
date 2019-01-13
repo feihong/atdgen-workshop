@@ -12,6 +12,7 @@
   "suffix": ".bs.js",
   "bs-dependencies": [
     "@ahrefs/bs-atdgen-codec-runtime",
+    "@glennsl/bs-json",
     "bs-fetch"
   ],
   "warnings": {

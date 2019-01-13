@@ -1,16 +1,6 @@
 [%bs.raw {|require('isomorphic-fetch')|}];
 open Prelude;
 
-let fetchIpApi = () => {
-  let url = "http://ip-api.com/json/";
-  JsPromise.(
-    Fetch.fetch(url)
-    ->then_(Fetch.Response.json)
-    ->then_(json => json->Ipapi_bs.read_result->resolve)
-  );
-};
-
-/* Main */
 let filename = "events.json";
 JsPromise.(
   (
@@ -20,7 +10,7 @@ JsPromise.(
       ->Event_bs.read_events
       ->resolve;
     } else {
-      fetchIpApi()
+      Ipapi.fetch()
       ->then_(result => {
           Printf.sprintf(
             "You are in %s, %s, %s",

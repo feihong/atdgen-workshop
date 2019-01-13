@@ -13,8 +13,6 @@ let fetchSource = (latitude, longitude) => {
        }
        ->Eventbrite_bs.write_searchInput
        ->Utils.makeQueryString;
-  Js.log(url);
-
   JsPromise.(
     Fetch.fetchWithInit(
       url,
