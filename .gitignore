@@ -1,7 +1,9 @@
 .merlin
-/_opam
-/node_modules
-/lib
+/_opam/
+/node_modules/
+/lib/
+/.cache/
+/dist/
 *.bs.js
 
 # Config

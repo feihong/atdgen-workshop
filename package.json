@@ -11,9 +11,13 @@
   "dependencies": {
     "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0",
     "bs-fetch": "^0.3.1",
-    "isomorphic-fetch": "^2.2.1"
+    "express": "^4.16.4",
+    "isomorphic-fetch": "^2.2.1",
+    "parcel-bundler": "^1.11.0",
+    "reason-react": "^0.5.3"
   },
   "scripts": {
+    "start": "node server.js",
     "postinstall": "opam pin add atd --dev-repo && opam pin add atdgen --dev-repo",
     "main": "node src/Main.bs.js",
     "clean": "bsb -clean-world",
