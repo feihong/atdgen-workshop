@@ -29,6 +29,12 @@ module NodeFs = {
   [@bs.module "fs"] external statSync: string => stats = "";
 };
 
+module JsDate = {
+  include Js.Date;
+
+  let compare: (t, t) => int = [%bs.raw {|(a, b) => a - b|}];
+};
+
 module Utils = {
   let makeQueryString = params => UrlSearchParams.(make(params)->toString);
 

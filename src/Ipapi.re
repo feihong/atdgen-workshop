@@ -31,3 +31,8 @@ let fetch = () => {
     ->then_(json => json->Ipapi_bs.read_result->resolve)
   );
 };
+
+let mockFetch = () => {
+  {Ipapi_t.city: "Chicago", region: "IL", country: "USA", lat: 0., lon: 0.}
+  ->JsPromise.resolve;
+};
