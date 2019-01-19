@@ -40,6 +40,10 @@ Install JS dependencies as well as atd binaries
 
     yarn install
 
-Generate OCaml source files from .atd definitions
+Generate OCaml source files from .atd definitions and build
 
-    yarn atdgen
+    yarn gen
+    
+Build .re and .ml files
+
+    yarn build
