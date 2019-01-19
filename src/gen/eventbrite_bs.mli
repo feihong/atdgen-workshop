@@ -32,7 +32,7 @@ type pagination = Eventbrite_t.pagination = {
 
 type organizer = Eventbrite_t.organizer = {
   id: Wrap.OrganizerId.t;
-  name: string;
+  name: string option;
   description: textHtmlNullable;
   url: string
 }

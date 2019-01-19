@@ -25,7 +25,7 @@ type pagination = {
 
 type organizer = {
   id: Wrap.OrganizerId.t;
-  name: string;
+  name: string option;
   description: textHtmlNullable;
   url: string
 }

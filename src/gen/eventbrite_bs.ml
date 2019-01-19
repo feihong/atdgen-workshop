@@ -32,7 +32,7 @@ type pagination = Eventbrite_t.pagination = {
 
 type organizer = Eventbrite_t.organizer = {
   id: Wrap.OrganizerId.t;
-  name: string;
+  name: string option;
   description: textHtmlNullable;
   url: string
 }
@@ -413,7 +413,7 @@ let write_organizer = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"name"
           t.name
@@ -448,7 +448,7 @@ let read_organizer = (
           name =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "name"
             ) json;
           description =

@@ -56,7 +56,7 @@ let convert =
   end_: Some(end_.utc),
   isSeries: is_series,
   organizer: {
-    name: organizer.name,
+    name: organizer.name->Option.getWithDefault("N/A"),
     description: organizer.description.text,
     url: organizer.url,
   },

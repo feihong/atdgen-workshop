@@ -33,6 +33,12 @@ let fetch = () => {
 };
 
 let mockFetch = () => {
-  {Ipapi_t.city: "Chicago", region: "IL", country: "USA", lat: 0., lon: 0.}
+  {
+    Ipapi_t.city: "Chicago",
+    region: "IL",
+    country: "USA",
+    lat: 41.972441,
+    lon: (-87.659131),
+  }
   ->JsPromise.resolve;
 };
