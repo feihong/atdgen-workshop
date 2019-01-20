@@ -41,27 +41,29 @@ let make = _children => {
              {("Showing " ++ events->List.length->string_of_int ++ " events")
               ->s}
            </div>
-           {events
-            ->List.map(event =>
-                <div className="mb-2">
-                  <a className="mr-2" href={event.url} target="_blank">
-                    event.name->s
-                  </a>
-                  <span className="mr-2">
-                    {event.start->Js.Date.toLocaleString->s}
-                  </span>
-                  <div className="text-grey-dark text-sm">
-                    {let addr = event.venue.address.address1
-                     switch (event.venue.name) {
-                     | Some(name) => sprintf("%s (%s)", name, addr)
-                     | None => addr
-                     }}
-                    ->s
-                  </div>
-                </div>
-              )
-            ->List.toArray
-            ->RR.array}
+           <ol>
+             {events
+              ->List.map(event =>
+                  <li className="mb-2">
+                    <a className="mr-2" href={event.url} target="_blank">
+                      event.name->s
+                    </a>
+                    <span className="mr-2">
+                      {event.start->Js.Date.toLocaleString->s}
+                    </span>
+                    <div className="text-grey-dark text-sm">
+                      {let addr = event.venue.address.address1
+                       switch (event.venue.name) {
+                       | Some(name) => sprintf("%s (%s)", name, addr)
+                       | None => addr
+                       }}
+                      ->s
+                    </div>
+                  </li>
+                )
+              ->List.toArray
+              ->RR.array}
+           </ol>
          </>
        }}
     </div>,
