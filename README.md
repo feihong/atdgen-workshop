@@ -1,4 +1,4 @@
-# Feihong's Atdgen Quickstart
+# Feihong's Atdgen Workshop
 
 A more fleshed-out example than the one presented in [this blog post](https://tech.ahrefs.com/getting-started-with-atdgen-and-bucklescript-1f3a14004081).
 
@@ -43,7 +43,7 @@ Install JS dependencies as well as atd binaries
 Generate OCaml source files from .atd definitions and build
 
     yarn gen
-    
+
 Build .re and .ml files
 
     yarn build

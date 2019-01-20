@@ -72,13 +72,14 @@ let convert =
   venue: {
     name: venue.name,
     address: {
-      let a = venue.address;
+      let {Eventbrite_t.city, region, postal_code, address_1, address_2} =
+        venue.address;
       {
-        address1: a.address_1,
-        address2: a.address_2,
-        city: a.city,
-        region: a.region,
-        postalCode: a.postal_code,
+        address1: address_1,
+        address2: address_2,
+        city,
+        region,
+        postalCode: postal_code,
       };
     },
   },
