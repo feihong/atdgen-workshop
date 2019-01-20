@@ -67,7 +67,8 @@ type searchInput = Eventbrite_t.searchInput = {
   latitude: float;
   longitude: float;
   within: string;
-  expand: string
+  expand: string;
+  page: int
 }
 
 let write__4 = (
@@ -776,6 +777,13 @@ let write_searchInput = (
             )
           ~name:"expand"
           t.expand
+        ;
+          Atdgen_codec_runtime.Encode.field
+            (
+            Atdgen_codec_runtime.Encode.int
+            )
+          ~name:"page"
+          t.page
       ]
     )
   )
@@ -807,6 +815,12 @@ let read_searchInput = (
             (
               Atdgen_codec_runtime.Decode.string
               |> Atdgen_codec_runtime.Decode.field "expand"
+            ) json;
+          page =
+            Atdgen_codec_runtime.Decode.decode
+            (
+              Atdgen_codec_runtime.Decode.int
+              |> Atdgen_codec_runtime.Decode.field "page"
             ) json;
       } : searchInput)
     )

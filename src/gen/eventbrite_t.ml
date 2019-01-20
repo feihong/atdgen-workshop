@@ -53,5 +53,6 @@ type searchInput = {
   latitude: float;
   longitude: float;
   within: string;
-  expand: string
+  expand: string;
+  page: int
 }

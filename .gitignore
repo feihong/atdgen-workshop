@@ -11,5 +11,5 @@ secrets.json
 config.json
 
 # Downloaded files
-eventbrite.json
+eventbrite-*.json
 events.json
