@@ -24,8 +24,8 @@ module OrganizerId =
 module Datetime = {
   type t = Js.Date.t;
   let wrap = Js.Date.fromString;
-  let unwrap = Js.Date.toUTCString;
-}
+  let unwrap = Js.Date.toISOString;
+};
 
 module ExternalId = {
   type t = {
@@ -38,4 +38,4 @@ module ExternalId = {
     | _ => failwith("external id has incorrect format: " ++ s)
     };
   let unwrap = ({source, id}) => source ++ ":" ++ id;
-}
+};
