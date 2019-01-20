@@ -1,5 +1,7 @@
 include Belt;
 
+module RR = ReasonReact;
+
 module JsPromise = {
   include Js.Promise;
 
@@ -36,6 +38,8 @@ module JsDate = {
 };
 
 module Utils = {
+  let s = RR.string;
+
   let makeQueryString = params => UrlSearchParams.(make(params)->toString);
 
   /* return true if given file exists and less than 6 hours old */
