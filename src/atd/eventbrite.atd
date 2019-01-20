@@ -1,5 +1,5 @@
 (*
-https://www.eventbrite.com/platform/api
+https://www.eventbrite.com/platform/api#/reference/event-search/search-events
 
 *)
 
@@ -9,6 +9,7 @@ type searchInput = {
   within <json name="location.within">: string;
   expand: string;
   page: int;
+  sort_by: string;
 }
 
 type searchOutput = {

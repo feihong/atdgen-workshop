@@ -68,7 +68,8 @@ type searchInput = Eventbrite_t.searchInput = {
   longitude: float;
   within: string;
   expand: string;
-  page: int
+  page: int;
+  sort_by: string
 }
 
 val read_address :  address Atdgen_codec_runtime.Decode.t

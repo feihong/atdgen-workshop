@@ -54,5 +54,6 @@ type searchInput = {
   longitude: float;
   within: string;
   expand: string;
-  page: int
+  page: int;
+  sort_by: string
 }

@@ -2,7 +2,7 @@ open Prelude;
 open Printf;
 module ExternalId = Wrap.ExternalId;
 
-let fetchSource = (latitude, longitude, page) => {
+let rec fetchSource = (latitude, longitude, page, acc) => {
   let filename = sprintf("eventbrite-%d.json", page);
   let url =
     "https://www.eventbriteapi.com/v3/events/search?"
@@ -11,6 +11,7 @@ let fetchSource = (latitude, longitude, page) => {
          longitude,
          within: "1mi",
          expand: "organizer,venue",
+         sort_by: "date",
          page,
        }
        ->Eventbrite_bs.write_searchInput
@@ -29,7 +30,13 @@ let fetchSource = (latitude, longitude, page) => {
     )
     ->then_(Fetch.Response.json)
     ->then_(Utils.writeCacheFile(~filename))
-    ->then_(json => json->Eventbrite_bs.read_searchOutput->resolve)
+    ->then_(json => {
+        let output = json->Eventbrite_bs.read_searchOutput;
+        let newAcc = [output.events, ...acc];
+        output.pagination.has_more_items ?
+          fetchSource(latitude, longitude, page + 1, newAcc) :
+          newAcc->List.flatten->resolve;
+      })
   );
 };
 
@@ -79,7 +86,7 @@ let convert =
 
 let fetch = (latitude, longitude) => {
   JsPromise.(
-    fetchSource(latitude, longitude, 1)
-    ->then_(results => results.events->List.map(convert)->resolve)
+    fetchSource(latitude, longitude, 1, [])
+    ->then_(events => events->List.map(convert)->resolve)
   );
 };

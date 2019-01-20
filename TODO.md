@@ -1,3 +1,3 @@
 # Todo
 
-- Fetch all pages
+- Add helpful comments
