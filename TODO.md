@@ -1,9 +1,13 @@
 # Todo
 
+- Hack support for arrays
 - Add helpful comments
 - Use RemoteData
 - Add Meetup API
 - Add output type (lastUpdated, city, region, events) to events.atd
-- Hack support for arrays
-- Improve atdgen.sh script
-- Convert generated code to Reason syntax
+- Add category
+- filter by category
+- server returns Result
+- use es6 instead of commonjs
+- allow nodemon to work alongside parcel
+- Add dojo checklist
