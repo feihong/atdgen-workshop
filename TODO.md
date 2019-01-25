@@ -1,6 +1,5 @@
 # Todo
 
-- Hack support for arrays
 - Add helpful comments
 - Use RemoteData
 - Add Meetup API
