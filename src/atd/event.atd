@@ -1,5 +1,10 @@
 type datetime = string wrap <ocaml module="Wrap.Datetime">
 
+type ('a, 'b) result <ocaml predef module="Belt.Result" t="t"> = [
+  | Ok of 'a
+  | Error of 'b
+] <ocaml repr="classic">
+
 type event = {
   externalId: string wrap <ocaml module="Wrap.ExternalId">;
   name: string;

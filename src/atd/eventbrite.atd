@@ -12,6 +12,12 @@ type searchInput = {
   sort_by: string;
 }
 
+type errorOutput = {
+  status_code: int;
+  error_description: string;
+  error: string;
+}
+
 type searchOutput = {
   pagination: pagination;
   events: events;
