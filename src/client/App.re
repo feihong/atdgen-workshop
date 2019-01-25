@@ -15,7 +15,7 @@ let make = _children => {
   initialState: () => {events: None},
 
   didMount: ({send}) =>
-    JsPromise.(
+    Promise.(
       Fetch.fetch("/events/")
       ->then_(Fetch.Response.json)
       ->then_(json => {

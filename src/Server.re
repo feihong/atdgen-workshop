@@ -3,9 +3,9 @@ open Prelude;
 
 let fetch = () => {
   let filename = "events.json";
-  JsPromise.(
+  Promise.(
     if (Utils.isCached(filename)) {
-      NodeFs.readFileAsUtf8Sync(filename)
+      Fs.readFileAsUtf8Sync(filename)
       ->Js.Json.parseExn
       ->Event_bs.read_events
       ->resolve;
@@ -25,7 +25,7 @@ let fetch = () => {
       ->then_(events =>
           Utils.writeEventsToCacheFile(
             ~filename,
-            events->List.sort((a, b) => JsDate.compare(a.start, b.start)),
+            events->List.sort((a, b) => Date.compare(a.start, b.start)),
           )
         )
       ->catch(err => {

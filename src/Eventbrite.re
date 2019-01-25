@@ -16,7 +16,7 @@ let rec fetchSource = (latitude, longitude, page, acc) => {
        }
        ->Eventbrite_bs.write_searchInput
        ->Utils.makeQueryString;
-  JsPromise.(
+  Promise.(
     Fetch.fetchWithInit(
       url,
       Fetch.RequestInit.make(
@@ -86,7 +86,7 @@ let convert =
 };
 
 let fetch = (latitude, longitude) => {
-  JsPromise.(
+  Promise.(
     fetchSource(latitude, longitude, 1, [])
     ->then_(events => events->List.map(convert)->resolve)
   );

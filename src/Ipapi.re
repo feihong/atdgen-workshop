@@ -24,7 +24,7 @@ let decode = json => {
 
 let fetch = () => {
   let url = "http://ip-api.com/json/";
-  JsPromise.(
+  Promise.(
     Fetch.fetch(url)
     ->then_(Fetch.Response.json)
     /* ->then_(json => json->decode->resolve) */
@@ -40,5 +40,5 @@ let mockFetch = () => {
     lat: 41.972441,
     lon: (-87.659131),
   }
-  ->JsPromise.resolve;
+  ->Promise.resolve;
 };

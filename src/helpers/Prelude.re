@@ -2,7 +2,7 @@ include Belt;
 
 module RR = ReasonReact;
 
-module JsPromise = {
+module Promise = {
   include Js.Promise;
 
   [@bs.send] external then_: (t('a), 'a => t('b)) => t('b) = "then";
@@ -10,7 +10,7 @@ module JsPromise = {
   [@bs.send] external catch: (t('a), error => t('a)) => t('a) = "";
 };
 
-module NodeFs = {
+module Fs = {
   include Node.Fs;
 
   type stats = {
@@ -23,7 +23,7 @@ module NodeFs = {
   [@bs.module "fs"] external statSync: string => stats = "";
 };
 
-module JsDate = {
+module Date = {
   include Js.Date;
 
   let compare: (t, t) => int = [%bs.raw {|(a, b) => a - b|}];
@@ -36,22 +36,22 @@ module Utils = {
 
   /* return true if given file exists and less than 6 hours old */
   let isCached = filename =>
-    !NodeFs.existsSync(filename) ?
+    !Fs.existsSync(filename) ?
       false :
       {
-        let mtime = NodeFs.statSync(filename)##mtime->Js.Date.getTime;
-        let delta = Js.Date.now() -. mtime;
+        let mtime = Fs.statSync(filename)##mtime->Date.getTime;
+        let delta = Date.now() -. mtime;
         delta < 6. *. 3600. *. 1000.;
       };
 
   let writeCacheFile = (~filename, json) => {
     let text = json->Js.Json.stringifyWithSpace(2);
-    NodeFs.writeFileAsUtf8Sync(filename, text);
-    JsPromise.resolve(json);
+    Fs.writeFileAsUtf8Sync(filename, text);
+    Promise.resolve(json);
   };
 
   let writeEventsToCacheFile = (~filename, events) => {
     events->Event_bs.write_events->writeCacheFile(~filename)->ignore;
-    JsPromise.resolve(events);
+    Promise.resolve(events);
   };
 };
