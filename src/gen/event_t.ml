@@ -30,3 +30,11 @@ type event = {
 }
 
 type events = event list
+
+type error = [
+    `NotAuthorized of string
+  | `NetworkError of string
+  | `UnknownError of string
+]
+
+type eventOutput = (events, error) result

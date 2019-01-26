@@ -2,6 +2,11 @@ open Prelude;
 open Printf;
 module ExternalId = Wrap.ExternalId;
 
+type output = {
+  status: int,
+  json: Js.Json.t,
+};
+
 let rec fetchSource = (latitude, longitude, page, acc) => {
   let filename = sprintf("eventbrite-%d.json", page);
   let url =
@@ -28,14 +33,31 @@ let rec fetchSource = (latitude, longitude, page, acc) => {
         (),
       ),
     )
-    ->then_(Fetch.Response.json)
-    ->then_(Utils.writeCacheFile(~filename))
-    ->then_(json => {
-        let output = json->Eventbrite_bs.read_searchOutput;
-        let newAcc = [output.events, ...acc];
-        output.pagination.has_more_items ?
-          fetchSource(latitude, longitude, page + 1, newAcc) :
-          newAcc->List.flatten->resolve;
+    ->then_(response => all2((
+      response->Fetch.Response.status->resolve,
+      response->Fetch.Response.json)))
+    ->then_(((status, json)) => {
+        Utils.writeCacheFile(~filename, json);
+        {status, json}->resolve
+      })
+    ->then_(({status, json}) => {
+        switch (status) {
+        | 200 =>
+          let output = json->Eventbrite_bs.read_searchOutput;
+          let newAcc = [output.events, ...acc];
+          output.pagination.has_more_items ?
+            fetchSource(latitude, longitude, page + 1, newAcc) :
+            newAcc->List.flatten->Result.Ok->resolve;
+        | status =>
+          let output = json->Eventbrite_bs.read_errorOutput;
+          let mesg = output.error ++ ": " ++ output.error_description;
+          (switch (status) {
+          | 400 => `NotAuthorized(mesg)
+          | _ => `UnknownError(mesg)
+          })
+          ->Result.Error
+          ->resolve
+        }
       })
   );
 };
@@ -88,6 +110,6 @@ let convert =
 let fetch = (latitude, longitude) => {
   Promise.(
     fetchSource(latitude, longitude, 1, [])
-    ->then_(events => events->List.map(convert)->resolve)
+    ->then_(events => events->Result.map(List.map(_, convert))->resolve)
   );
 };

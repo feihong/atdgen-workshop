@@ -1,13 +1,16 @@
 [%bs.raw {|require('isomorphic-fetch')|}];
 open Prelude;
 
+let sortEvents =
+  List.sort(_, (a, b) => Date.compare(a.Event_t.start, b.start));
+
 let fetch = () => {
   let filename = "events.json";
   Promise.(
     if (Utils.isCached(filename)) {
       Fs.readFileAsUtf8Sync(filename)
       ->Js.Json.parseExn
-      ->Event_bs.read_events
+      ->Event_bs.read_eventOutput
       ->resolve;
     } else {
       /* Ipapi.fetch() */
@@ -22,15 +25,16 @@ let fetch = () => {
           ->Js.log;
           Eventbrite.fetch(result.lat, result.lon);
         })
-      ->then_(events =>
-          Utils.writeEventsToCacheFile(
-            ~filename,
-            events->List.sort((a, b) => Date.compare(a.start, b.start)),
-          )
-        )
+      ->then_(events => {
+          let events = events->Result.map(sortEvents);
+          events->Event_bs.write_eventOutput
+          ->Utils.writeCacheFile(~filename)
+          ->ignore;
+          events->resolve;
+      })
       ->catch(err => {
           Js.log2("Caught error:", err);
-          resolve([]);
+          Result.Error(`NetworkError(err->Js.String.make))->resolve;
         });
     }
   );

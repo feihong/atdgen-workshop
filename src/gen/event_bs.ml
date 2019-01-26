@@ -35,12 +35,16 @@ type event = Event_t.event = {
 
 type events = Event_t.events
 
-let write__5 = (
+type error = Event_t.error
+
+type eventOutput = Event_t.eventOutput
+
+let write__6 = (
   Atdgen_codec_runtime.Encode.nullable (
     Atdgen_codec_runtime.Encode.string
   )
 )
-let read__5 = (
+let read__6 = (
   Atdgen_codec_runtime.Decode.nullable (
     Atdgen_codec_runtime.Decode.string
   )
@@ -59,28 +63,28 @@ let write_address = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__5
+            write__6
             )
           ~name:"address2"
           t.address2
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__5
+            write__6
             )
           ~name:"city"
           t.city
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__5
+            write__6
             )
           ~name:"region"
           t.region
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__5
+            write__6
             )
           ~name:"postalCode"
           t.postalCode
@@ -101,25 +105,25 @@ let read_address = (
           address2 =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__5
+              read__6
               |> Atdgen_codec_runtime.Decode.field "address2"
             ) json;
           city =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__5
+              read__6
               |> Atdgen_codec_runtime.Decode.field "city"
             ) json;
           region =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__5
+              read__6
               |> Atdgen_codec_runtime.Decode.field "region"
             ) json;
           postalCode =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__5
+              read__6
               |> Atdgen_codec_runtime.Decode.field "postalCode"
             ) json;
       } : address)
@@ -133,7 +137,7 @@ let write_venue = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            write__5
+            write__6
             )
           ~name:"name"
           t.name
@@ -155,7 +159,7 @@ let read_venue = (
           name =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__5
+              read__6
               |> Atdgen_codec_runtime.Decode.field "name"
             ) json;
           address =
@@ -223,7 +227,7 @@ let write_organizer = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__5
+            write__6
             )
           ~name:"description"
           t.description
@@ -250,7 +254,7 @@ let read_organizer = (
           description =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__5
+              read__6
               |> Atdgen_codec_runtime.Decode.field "description"
             ) json;
       } : organizer)
@@ -272,21 +276,21 @@ let write_datetime = (
 let read_datetime = (
   read__1
 )
-let write__3 = (
+let write__4 = (
   Atdgen_codec_runtime.Encode.nullable (
     write_datetime
   )
 )
-let read__3 = (
+let read__4 = (
   Atdgen_codec_runtime.Decode.nullable (
     read_datetime
   )
 )
-let write__2 = (
+let write__3 = (
     Atdgen_codec_runtime.Encode.string
   |> Atdgen_codec_runtime.Encode.contramap (Wrap.ExternalId.unwrap)
 )
-let read__2 = (
+let read__3 = (
   (
     Atdgen_codec_runtime.Decode.string
   ) |> (Atdgen_codec_runtime.Decode.map (Wrap.ExternalId.wrap))
@@ -298,7 +302,7 @@ let write_event = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            write__2
+            write__3
             )
           ~name:"externalId"
           t.externalId
@@ -333,7 +337,7 @@ let write_event = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write__3
+            write__4
             )
           ~name:"end"
           t.end_
@@ -369,7 +373,7 @@ let read_event = (
           externalId =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__2
+              read__3
               |> Atdgen_codec_runtime.Decode.field "externalId"
             ) json;
           name =
@@ -399,7 +403,7 @@ let read_event = (
           end_ =
             Atdgen_codec_runtime.Decode.decode
             (
-              read__3
+              read__4
               |> Atdgen_codec_runtime.Decode.field "end"
             ) json;
           isSeries =
@@ -424,19 +428,106 @@ let read_event = (
     )
   )
 )
-let write__4 = (
+let write__5 = (
   Atdgen_codec_runtime.Encode.list (
     write_event
   )
 )
-let read__4 = (
+let read__5 = (
   Atdgen_codec_runtime.Decode.list (
     read_event
   )
 )
 let write_events = (
-  write__4
+  write__5
 )
 let read_events = (
-  read__4
+  read__5
+)
+let write_error = (
+  Atdgen_codec_runtime.Encode.make (fun (x : _) -> match x with
+    | `NotAuthorized x ->
+    Atdgen_codec_runtime.Encode.constr1 "NotAuthorized" (
+      Atdgen_codec_runtime.Encode.string
+    ) x
+    | `NetworkError x ->
+    Atdgen_codec_runtime.Encode.constr1 "NetworkError" (
+      Atdgen_codec_runtime.Encode.string
+    ) x
+    | `UnknownError x ->
+    Atdgen_codec_runtime.Encode.constr1 "UnknownError" (
+      Atdgen_codec_runtime.Encode.string
+    ) x
+  )
+)
+let read_error = (
+  Atdgen_codec_runtime.Decode.enum
+  [
+      (
+      "NotAuthorized"
+      ,
+        `Decode (
+        Atdgen_codec_runtime.Decode.string
+        |> Atdgen_codec_runtime.Decode.map (fun x -> ((`NotAuthorized x) : _))
+        )
+      )
+    ;
+      (
+      "NetworkError"
+      ,
+        `Decode (
+        Atdgen_codec_runtime.Decode.string
+        |> Atdgen_codec_runtime.Decode.map (fun x -> ((`NetworkError x) : _))
+        )
+      )
+    ;
+      (
+      "UnknownError"
+      ,
+        `Decode (
+        Atdgen_codec_runtime.Decode.string
+        |> Atdgen_codec_runtime.Decode.map (fun x -> ((`UnknownError x) : _))
+        )
+      )
+  ]
+)
+let write__2 = (
+  Atdgen_codec_runtime.Encode.make (fun (x : (_, _) result) -> match x with
+    | Ok x ->
+    Atdgen_codec_runtime.Encode.constr1 "Ok" (
+      write_events
+    ) x
+    | Error x ->
+    Atdgen_codec_runtime.Encode.constr1 "Error" (
+      write_error
+    ) x
+  )
+)
+let read__2 = (
+  Atdgen_codec_runtime.Decode.enum
+  [
+      (
+      "Ok"
+      ,
+        `Decode (
+        read_events
+        |> Atdgen_codec_runtime.Decode.map (fun x -> ((Ok x) : (_, _) result))
+        )
+      )
+    ;
+      (
+      "Error"
+      ,
+        `Decode (
+        read_error
+        |> Atdgen_codec_runtime.Decode.map (fun x -> ((Error x) : (_, _) result))
+        )
+      )
+  ]
+)
+let write_eventOutput = (
+  write__2
+)
+let read_eventOutput = (
+  read__2
 )

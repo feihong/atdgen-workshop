@@ -47,11 +47,5 @@ module Utils = {
   let writeCacheFile = (~filename, json) => {
     let text = json->Js.Json.stringifyWithSpace(2);
     Fs.writeFileAsUtf8Sync(filename, text);
-    Promise.resolve(json);
-  };
-
-  let writeEventsToCacheFile = (~filename, events) => {
-    events->Event_bs.write_events->writeCacheFile(~filename)->ignore;
-    Promise.resolve(events);
   };
 };

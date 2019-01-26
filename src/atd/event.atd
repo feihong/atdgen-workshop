@@ -5,6 +5,14 @@ type ('a, 'b) result <ocaml predef module="Belt.Result" t="t"> = [
   | Error of 'b
 ] <ocaml repr="classic">
 
+type error = [
+  | NotAuthorized of string
+  | NetworkError of string
+  | UnknownError of string
+]
+
+type eventOutput = (events, error) result
+
 type event = {
   externalId: string wrap <ocaml module="Wrap.ExternalId">;
   name: string;

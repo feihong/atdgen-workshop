@@ -35,6 +35,10 @@ type event = Event_t.event = {
 
 type events = Event_t.events
 
+type error = Event_t.error
+
+type eventOutput = Event_t.eventOutput
+
 val read_address :  address Atdgen_codec_runtime.Decode.t
 
 val write_address :  address Atdgen_codec_runtime.Encode.t
@@ -62,4 +66,12 @@ val write_event :  event Atdgen_codec_runtime.Encode.t
 val read_events :  events Atdgen_codec_runtime.Decode.t
 
 val write_events :  events Atdgen_codec_runtime.Encode.t
+
+val read_error :  error Atdgen_codec_runtime.Decode.t
+
+val write_error :  error Atdgen_codec_runtime.Encode.t
+
+val read_eventOutput :  eventOutput Atdgen_codec_runtime.Decode.t
+
+val write_eventOutput :  eventOutput Atdgen_codec_runtime.Encode.t
 
