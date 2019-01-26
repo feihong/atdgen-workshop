@@ -1,4 +1,5 @@
 include Belt;
+include BsRemotedata;
 
 module RR = ReasonReact;
 

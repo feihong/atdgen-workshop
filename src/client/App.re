@@ -2,6 +2,8 @@ open Prelude;
 open Utils;
 open Printf;
 
+type remoteData = RemoteData.t(Event_t.error, Event_t.events);
+
 type state = {events: Event_t.eventOutput};
 
 type action =
