@@ -1,8 +1,22 @@
 # Feihong's Atdgen Workshop
 
-A more fleshed-out example than the one presented in [this blog post](https://tech.ahrefs.com/getting-started-with-atdgen-and-bucklescript-1f3a14004081).
+This is the repo for a workshop that guides you through creating a simple "events near you" app using ReasonML. Since we are creating a complete app, we will cover a good number of topics, but there is a particular emphasis on [atd and atdgen](https://atd.readthedocs.io/). Atd is a DSL for defining types, and atdgen is a command line tool that takes atd type definitions and generates serialization boilerplate for them. Never write JSON encoders and decoders by hand again!
+
+Other topics covered by this workshop:
+
+- Use a prelude
+- Invoke BuckleScript-generated functions from JS
+- Turn on warnings as errors
+- Wrap types in atd
+- Write JSON decoder by hand
+- Create bindings to Node APIs
+- Make requests using bs-fetch
+- Set up parcel with hot module reloading
+- Functors
 
 ## Prerequisites
+
+We assume that you are using a Unix operating system, and have [yarn installed](https://yarnpkg.com/lang/en/docs/install/).
 
 Install opam and OCaml switch
 
@@ -15,8 +29,8 @@ Install opam and OCaml switch
     opam switch create . 4.07.1 --yes
 
     # Install atd and atdgen from master instead of using official release.
-    opam pin add atd --dev-repo
-    opam pin add atdgen --dev-repo
+    opam pin add atd --dev-repo --yes
+    opam pin add atdgen --dev-repo --yes
 
 Note: Run `opam switch list-available` to get a list of all available compiler versions. The `opam switch create` command tends to take a long time.
 
@@ -47,3 +61,7 @@ Generate OCaml source files from .atd definitions and build
 Build .re and .ml files
 
     yarn build
+
+## Links
+
+[Atdgen BuckleScript support blog post](https://tech.ahrefs.com/getting-started-with-atdgen-and-bucklescript-1f3a14004081)

@@ -1,8 +1,7 @@
 # Todo
 
-- Add workshop description
-- Add helpful comments
 - Use RemoteData
+- Add helpful comments
 - Add Meetup API
 - Add output type (lastUpdated, city, region, events) to events.atd
 - Add category
