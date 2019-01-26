@@ -2,26 +2,26 @@ open Prelude;
 open Utils;
 open Printf;
 
-type remoteData = RemoteData.t(Event_t.error, Event_t.events);
+type remoteEvents = RemoteData.t(Event_t.error, Event_t.events);
 
-type state = {events: Event_t.eventOutput};
+type state = {events: remoteEvents};
 
 type action =
-  | LoadEvents(Event_t.eventOutput);
+  | LoadEvents(remoteEvents);
 
 let component = RR.reducerComponent(__MODULE__);
 
 let make = _children => {
   ...component,
 
-  initialState: () => {events: Ok([])},
+  initialState: () => {events: NotAsked},
 
   didMount: ({send}) =>
     Promise.(
       Fetch.fetch("/events/")
       ->then_(Fetch.Response.json)
       ->then_(json => {
-          send @@ LoadEvents(Event_bs.read_eventOutput(json));
+          send @@ LoadEvents(Event_bs.read_eventOutput(json)->RemoteData.fromResult);
           resolve();
         })
       ->catch(err => Js.log2("Failed to fetch events:", err)->resolve)
@@ -37,8 +37,10 @@ let make = _children => {
     <div className="container p-4">
       <h1 className="mb-4"> "Events Near You"->s </h1>
       {switch (state.events) {
-       | Error(err) => <div> {("Error: " ++ err->Js.String.make)->s} </div>
-       | Ok(events) =>
+       | NotAsked | Loading => <div> "Loading event..."->s </div>
+       | Failure(err) =>
+         <div> {("Failed to load events: " ++ err->Js.String.make)->s} </div>
+       | Success(events) =>
          <>
            <div className="font-bold mb-4">
              {("Showing " ++ events->List.length->string_of_int ++ " events")
