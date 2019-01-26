@@ -2,40 +2,41 @@ open Prelude;
 open Utils;
 open Printf;
 
-type state = {events: option(Event_t.events)};
+type state = {events: Event_t.eventOutput};
 
 type action =
-  | LoadEvents(Event_t.events);
+  | LoadEvents(Event_t.eventOutput);
 
 let component = RR.reducerComponent(__MODULE__);
 
 let make = _children => {
   ...component,
 
-  initialState: () => {events: None},
+  initialState: () => {events: Ok([])},
 
   didMount: ({send}) =>
     Promise.(
       Fetch.fetch("/events/")
       ->then_(Fetch.Response.json)
       ->then_(json => {
-          send @@ LoadEvents(Event_bs.read_events(json));
+          send @@ LoadEvents(Event_bs.read_eventOutput(json));
           resolve();
         })
+      ->catch(err => Js.log2("Failed to fetch events:", err)->resolve)
       ->ignore
     ),
 
   reducer: (action, _state) =>
     switch (action) {
-    | LoadEvents(events) => RR.Update({events: Some(events)})
+    | LoadEvents(events) => RR.Update({events: events})
     },
 
   render: ({state}) =>
     <div className="container p-4">
       <h1 className="mb-4"> "Events Near You"->s </h1>
       {switch (state.events) {
-       | None => <div> "No events found"->s </div>
-       | Some(events) =>
+       | Error(err) => <div> {("Error: " ++ err->Js.String.make)->s} </div>
+       | Ok(events) =>
          <>
            <div className="font-bold mb-4">
              {("Showing " ++ events->List.length->string_of_int ++ " events")
@@ -44,7 +45,9 @@ let make = _children => {
            <ol>
              {events
               ->List.map(event =>
-                  <li className="mb-2">
+                  <li
+                    key={event.externalId->Wrap.ExternalId.unwrap}
+                    className="mb-2">
                     <a className="mr-2" href={event.url} target="_blank">
                       event.name->s
                     </a>
