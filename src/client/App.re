@@ -21,10 +21,11 @@ let make = _children => {
       Fetch.fetch("/events/")
       ->then_(Fetch.Response.json)
       ->then_(json => {
-          send @@ LoadEvents(Event_bs.read_eventOutput(json)->RemoteData.fromResult);
+          send @@
+          LoadEvents(Event_bs.read_eventOutput(json)->RemoteData.fromResult);
           resolve();
         })
-      ->catch(err => Js.log2("Failed to fetch events:", err)->resolve)
+      ->catch(err => Console.error2("Failed to fetch events:", err)->resolve)
       ->ignore
     ),
 
@@ -37,7 +38,8 @@ let make = _children => {
     <div className="container p-4">
       <h1 className="mb-4"> "Events Near You"->s </h1>
       {switch (state.events) {
-       | NotAsked | Loading => <div> "Loading event..."->s </div>
+       | NotAsked
+       | Loading => <div> "Loading event..."->s </div>
        | Failure(err) =>
          <div> {("Failed to load events: " ++ err->Js.String.make)->s} </div>
        | Success(events) =>

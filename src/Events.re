@@ -27,13 +27,14 @@ let fetch = () => {
         })
       ->then_(events => {
           let events = events->Result.map(sortEvents);
-          events->Event_bs.write_eventOutput
+          events
+          ->Event_bs.write_eventOutput
           ->Utils.writeCacheFile(~filename)
           ->ignore;
           events->resolve;
-      })
+        })
       ->catch(err => {
-          Js.log2("Caught error:", err);
+          Console.error2("Caught error:", err);
           Result.Error(`NetworkError(err->Js.String.make))->resolve;
         });
     }

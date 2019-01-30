@@ -1,6 +1,6 @@
-include Belt;
-
 module RemoteData = BsRemotedata.RemoteData;
+
+module Console = Js.Console;
 
 module RR = ReasonReact;
 
