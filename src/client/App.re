@@ -17,17 +17,18 @@ let make = _children => {
   initialState: () => {events: NotAsked},
 
   didMount: ({send}) =>
-    Promise.(
-      Fetch.fetch("/events/")
-      ->then_(Fetch.Response.json)
-      ->then_(json => {
-          send @@
-          LoadEvents(Event_bs.read_eventOutput(json)->RemoteData.fromResult);
-          resolve();
-        })
-      ->catch(err => Console.error2("Failed to fetch events:", err)->resolve)
-      ->ignore
-    ),
+    FutureFetch.fetch("/events/")
+    ->Future.flatMapOk(FutureFetch.json)
+    ->Future.mapOk(json =>
+        json
+        ->Utils.decode(Event_bs.read_eventOutput)
+        ->Result.map(output => {
+            send @@ LoadEvents(output->RemoteData.fromResult);
+            output;
+          })
+      )
+    ->Future.tapError(err => Console.error2("Failed to fetch events:", err))
+    ->ignore,
 
   reducer: (action, _state) =>
     switch (action) {
@@ -61,10 +62,12 @@ let make = _children => {
                       {event.start->Js.Date.toLocaleString->s}
                     </span>
                     <div className="text-grey-dark text-sm">
-                      {let addr = event.venue.address.address1
-                       switch (event.venue.name) {
-                       | Some(name) => sprintf("%s (%s)", name, addr)
-                       | None => addr
+                      {switch (event.venue.name, event.venue.address.address1) {
+                       | (Some(name), Some(addr)) =>
+                         sprintf("%s (%s)", name, addr)
+                       | (None, Some(addr)) => addr
+                       | (Some(name), None) => name
+                       | _ => "N/A"
                        }}
                       ->s
                     </div>

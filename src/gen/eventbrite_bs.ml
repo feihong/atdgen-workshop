@@ -2,7 +2,7 @@
               [@@@ocaml.warning "-27-32-35-39"]
 
 type address = Eventbrite_t.address = {
-  address_1: string;
+  address_1: string option;
   address_2: string option;
   city: string option;
   region: string option;
@@ -46,7 +46,7 @@ type datetime = Eventbrite_t.datetime = {
 type event = Eventbrite_t.event = {
   id: Wrap.EventId.t;
   name: textHtml;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string;
   start: datetime;
   end_: datetime;
@@ -95,7 +95,7 @@ let write_address = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__4
             )
           ~name:"address_1"
           t.address_1
@@ -138,7 +138,7 @@ let read_address = (
           address_1 =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__4
               |> Atdgen_codec_runtime.Decode.field "address_1"
             ) json;
           address_2 =
@@ -569,7 +569,7 @@ let write_event = (
         ;
           Atdgen_codec_runtime.Encode.field
             (
-            write_textHtml
+            write_textHtmlNullable
             )
           ~name:"description"
           t.description
@@ -645,7 +645,7 @@ let read_event = (
           description =
             Atdgen_codec_runtime.Decode.decode
             (
-              read_textHtml
+              read_textHtmlNullable
               |> Atdgen_codec_runtime.Decode.field "description"
             ) json;
           url =

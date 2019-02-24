@@ -6,37 +6,34 @@ let sortEvents =
 
 let fetch = () => {
   let filename = "events.json";
-  Promise.(
-    if (Utils.isCached(filename)) {
-      Fs.readFileAsUtf8Sync(filename)
-      ->Js.Json.parseExn
-      ->Event_bs.read_eventOutput
-      ->resolve;
-    } else {
-      /* Ipapi.fetch() */
-      Ipapi.mockFetch()
-      ->then_(result => {
+  if (Utils.isCached(filename)) {
+    Fs.readFileAsUtf8Sync(filename)
+    ->Js.Json.parseExn
+    ->Event_bs.read_eventOutput
+    ->Future.value;
+  } else {
+    // Ipapi.fetch()
+    Ipapi.mockFetch()
+    ->Future.flatMapOk(result => {
+        Js.log(
           Printf.sprintf(
             "You are in %s, %s, %s",
             result.Ipapi_t.city,
             result.region,
             result.country,
-          )
-          ->Js.log;
-          Eventbrite.fetch(result.lat, result.lon);
-        })
-      ->then_(events => {
-          let events = events->Result.map(sortEvents);
-          events
-          ->Event_bs.write_eventOutput
-          ->Utils.writeCacheFile(~filename)
-          ->ignore;
-          events->resolve;
-        })
-      ->catch(err => {
-          Console.error2("Caught error:", err);
-          Result.Error(`NetworkError(err->Js.String.make))->resolve;
-        });
-    }
-  );
+          ),
+        );
+        Eventbrite.fetch(result.lat, result.lon);
+      })
+    ->Future.tapOk(events =>
+        events
+        ->sortEvents
+        ->Result.Ok
+        ->Event_bs.write_eventOutput
+        ->Utils.writeCacheFile(~filename)
+      )
+    ->Future.tapError(err => Console.error2("Caught error:", err));
+  };
 };
+
+let fetchAsPromise = () => fetch()->FutureJs.toPromise;

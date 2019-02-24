@@ -2,7 +2,7 @@
               [@@@ocaml.warning "-27-32-35-39"]
 
 type address = Event_t.address = {
-  address1: string;
+  address1: string option;
   address2: string option;
   city: string option;
   region: string option;

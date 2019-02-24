@@ -2,7 +2,7 @@
               [@@@ocaml.warning "-27-32-35-39"]
 
 type address = {
-  address1: string;
+  address1: string option;
   address2: string option;
   city: string option;
   region: string option;
@@ -35,6 +35,7 @@ type error = [
     `NotAuthorized of string
   | `NetworkError of string
   | `UnknownError of string
+  | `ParseError of string
 ]
 
 type eventOutput = (events, error) result

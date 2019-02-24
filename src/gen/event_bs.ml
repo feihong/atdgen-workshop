@@ -2,7 +2,7 @@
               [@@@ocaml.warning "-27-32-35-39"]
 
 type address = Event_t.address = {
-  address1: string;
+  address1: string option;
   address2: string option;
   city: string option;
   region: string option;
@@ -56,7 +56,7 @@ let write_address = (
       [
           Atdgen_codec_runtime.Encode.field
             (
-            Atdgen_codec_runtime.Encode.string
+            write__6
             )
           ~name:"address1"
           t.address1
@@ -99,7 +99,7 @@ let read_address = (
           address1 =
             Atdgen_codec_runtime.Decode.decode
             (
-              Atdgen_codec_runtime.Decode.string
+              read__6
               |> Atdgen_codec_runtime.Decode.field "address1"
             ) json;
           address2 =
@@ -458,6 +458,10 @@ let write_error = (
     Atdgen_codec_runtime.Encode.constr1 "UnknownError" (
       Atdgen_codec_runtime.Encode.string
     ) x
+    | `ParseError x ->
+    Atdgen_codec_runtime.Encode.constr1 "ParseError" (
+      Atdgen_codec_runtime.Encode.string
+    ) x
   )
 )
 let read_error = (
@@ -487,6 +491,15 @@ let read_error = (
         `Decode (
         Atdgen_codec_runtime.Decode.string
         |> Atdgen_codec_runtime.Decode.map (fun x -> ((`UnknownError x) : _))
+        )
+      )
+    ;
+      (
+      "ParseError"
+      ,
+        `Decode (
+        Atdgen_codec_runtime.Decode.string
+        |> Atdgen_codec_runtime.Decode.map (fun x -> ((`ParseError x) : _))
         )
       )
   ]

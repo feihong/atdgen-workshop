@@ -36,7 +36,7 @@ type events = event list
 type event = {
   id: string wrap <ocaml module="Wrap.EventId">;
   name: textHtml;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string;
   start: datetime;
   end_ <json name="end">: datetime;
@@ -60,7 +60,7 @@ type organizer = {
 }
 
 type address = {
-  address_1: string;
+  address_1: string nullable;
   address_2: string nullable;
   city: string nullable;
   region: string nullable;

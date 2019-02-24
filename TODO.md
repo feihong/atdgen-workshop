@@ -1,6 +1,7 @@
 # Todo
 
-- Use RemoteData
+- Make UrlSearchParams helper module using bs-webapi
+- Use bs-emotion
 - Add helpful comments
 - Add Meetup API
 - Add output type (lastUpdated, city, region, events) to events.atd

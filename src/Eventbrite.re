@@ -21,45 +21,51 @@ let rec fetchSource = (latitude, longitude, page, acc) => {
        }
        ->Eventbrite_bs.write_searchInput
        ->Utils.makeQueryString;
-  Promise.(
-    Fetch.fetchWithInit(
-      url,
-      Fetch.RequestInit.make(
-        ~method_=Fetch.Post,
-        ~headers=
-          Fetch.HeadersInit.make({
-            "Authorization": "Bearer " ++ Config.eventbriteToken,
-          }),
-        (),
-      ),
-    )
-    ->then_(response => all2((
-      response->Fetch.Response.status->resolve,
-      response->Fetch.Response.json)))
-    ->then_(((status, json)) => {
-        Utils.writeCacheFile(~filename, json);
-        {status, json}->resolve
-      })
-    ->then_(({status, json}) => {
-        switch (status) {
-        | 200 =>
-          let output = json->Eventbrite_bs.read_searchOutput;
-          let newAcc = [output.events, ...acc];
-          output.pagination.has_more_items ?
-            fetchSource(latitude, longitude, page + 1, newAcc) :
-            newAcc->List.flatten->Result.Ok->resolve;
-        | status =>
-          let output = json->Eventbrite_bs.read_errorOutput;
-          let mesg = output.error ++ ": " ++ output.error_description;
-          (switch (status) {
-          | 400 => `NotAuthorized(mesg)
-          | _ => `UnknownError(mesg)
-          })
-          ->Result.Error
-          ->resolve
-        }
-      })
-  );
+
+  FutureFetch.fetchWithInit(
+    url,
+    Fetch.RequestInit.make(
+      ~method_=Fetch.Post,
+      ~headers=
+        Fetch.HeadersInit.make({
+          "Authorization": "Bearer " ++ Config.eventbriteToken,
+        }),
+      (),
+    ),
+  )
+  ->Future.flatMapOk(response => {
+      let status = response->Fetch.Response.status;
+      response
+      ->FutureFetch.json
+      ->Future.tapOk(Utils.writeCacheFile(~filename))
+      ->Future.flatMapOk(json =>
+          switch (status) {
+          | 200 =>
+            switch (json->Utils.decode(Eventbrite_bs.read_searchOutput)) {
+            | Error(_) as err => err->Future.value
+            | Ok(output) =>
+              let newAcc = [output.events, ...acc];
+              output.pagination.has_more_items ?
+                fetchSource(latitude, longitude, page + 1, newAcc) :
+                newAcc->List.flatten->Result.Ok->Future.value;
+            }
+          | status =>
+            (
+              switch (json->Utils.decode(Eventbrite_bs.read_errorOutput)) {
+              | Error(err) => err
+              | Ok(output) =>
+                let mesg = output.error ++ ": " ++ output.error_description;
+                switch (status) {
+                | 400 => `NotAuthorized(mesg)
+                | _ => `UnknownError(mesg)
+                };
+              }
+            )
+            ->Result.Error
+            ->Future.value
+          }
+        );
+    });
 };
 
 let convert =
@@ -81,7 +87,7 @@ let convert =
     id: id->Wrap.EventId.unwrap,
   },
   name: name.text,
-  description: description.text,
+  description: description.text->Option.getWithDefault("N/A"),
   url,
   start: start.utc,
   end_: Some(end_.utc),
@@ -108,8 +114,6 @@ let convert =
 };
 
 let fetch = (latitude, longitude) => {
-  Promise.(
-    fetchSource(latitude, longitude, 1, [])
-    ->then_(events => events->Result.map(List.map(_, convert))->resolve)
-  );
+  fetchSource(latitude, longitude, 1, [])
+  ->Future.mapOk(events => events->List.map(convert));
 };

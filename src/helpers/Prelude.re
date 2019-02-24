@@ -4,12 +4,19 @@ module Console = Js.Console;
 
 module RR = ReasonReact;
 
-module Promise = {
-  include Js.Promise;
+module FutureFetch = {
+  let errorTransformer = err => `NetworkError(Js.String.make(err));
 
-  [@bs.send] external then_: (t('a), 'a => t('b)) => t('b) = "then";
+  let fetch = url =>
+    Fetch.fetch(url)->FutureJs.fromPromise(errorTransformer);
 
-  [@bs.send] external catch: (t('a), error => t('a)) => t('a) = "";
+  let fetchWithInit = (url, init) =>
+    Fetch.fetchWithInit(url, init)->FutureJs.fromPromise(errorTransformer);
+
+  let json = response =>
+    response
+    ->Fetch.Response.json
+    ->FutureJs.fromPromise(err => `ParseError(Js.String.make(err)));
 };
 
 module Fs = {
@@ -33,6 +40,12 @@ module Date = {
 
 module Utils = {
   let s = RR.string;
+
+  let decode = (json, decoder) =>
+    switch (json->decoder) {
+    | exception err => Result.Error(`ParseError(Js.String.make(err)))
+    | output => Result.Ok(output)
+    };
 
   let makeQueryString = params => UrlSearchParams.(make(params)->toString);
 

@@ -9,6 +9,7 @@ type error = [
   | NotAuthorized of string
   | NetworkError of string
   | UnknownError of string
+  | ParseError of string
 ]
 
 type eventOutput = (events, error) result
@@ -39,7 +40,7 @@ type organizer = {
 }
 
 type address = {
-  address1: string;
+  address1: string nullable;
   address2: string nullable;
   city: string nullable;
   region: string nullable;

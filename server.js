@@ -6,7 +6,7 @@ const app = require('express')()
 const bundler = new Bundler('index.html', {})
 
 app.get('/events/', async (req, res) => {
-  let output = await Events.fetch()
+  let output = await Events.fetchAsPromise()
   res.status(200).json(Event_bs.write_eventOutput(output))
 })
 

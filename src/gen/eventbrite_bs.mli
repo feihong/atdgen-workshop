@@ -2,7 +2,7 @@
               [@@@ocaml.warning "-27-32-35-39"]
 
 type address = Eventbrite_t.address = {
-  address_1: string;
+  address_1: string option;
   address_2: string option;
   city: string option;
   region: string option;
@@ -46,7 +46,7 @@ type datetime = Eventbrite_t.datetime = {
 type event = Eventbrite_t.event = {
   id: Wrap.EventId.t;
   name: textHtml;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string;
   start: datetime;
   end_: datetime;

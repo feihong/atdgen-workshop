@@ -2,7 +2,7 @@
               [@@@ocaml.warning "-27-32-35-39"]
 
 type address = {
-  address_1: string;
+  address_1: string option;
   address_2: string option;
   city: string option;
   region: string option;
@@ -35,7 +35,7 @@ type datetime = { timezone: string; local: string; utc: Wrap.Datetime.t }
 type event = {
   id: Wrap.EventId.t;
   name: textHtml;
-  description: textHtml;
+  description: textHtmlNullable;
   url: string;
   start: datetime;
   end_: datetime;
