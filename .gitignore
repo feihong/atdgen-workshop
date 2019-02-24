@@ -5,6 +5,7 @@
 /.cache/
 /dist/
 *.bs.js
+.DS_Store
 
 # Config
 secrets.json

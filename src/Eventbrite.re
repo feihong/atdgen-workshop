@@ -20,7 +20,7 @@ let rec fetchSource = (latitude, longitude, page, acc) => {
          page,
        }
        ->Eventbrite_bs.write_searchInput
-       ->Utils.makeQueryString;
+       ->QueryString.make;
 
   FutureFetch.fetchWithInit(
     url,

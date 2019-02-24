@@ -1091,6 +1091,11 @@ bs-remotedata@^1.0.0:
   dependencies:
     bs-fetch "^0.3.0"
 
+bs-webapi@^0.13.4:
+  version "0.13.4"
+  resolved "https://registry.yarnpkg.com/bs-webapi/-/bs-webapi-0.13.4.tgz#208fae880704c9745e85daaa5aebef924d5ad381"
+  integrity sha512-Mc3nM+rGJRopCEZqQZGFGX4iSd0j19Uz+ebcNXmGYKgjZ2tq4n1uo1iX0fHuvlGlqpzxlNNG4xQy+Epxqm7hOg==
+
 buffer-equal@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/buffer-equal/-/buffer-equal-0.0.1.tgz#91bc74b11ea405bc916bc6aa908faafa5b4aac4b"

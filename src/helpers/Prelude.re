@@ -38,6 +38,15 @@ module Date = {
   let compare: (t, t) => int = [%bs.raw {|(a, b) => a - b|}];
 };
 
+module QueryString = {
+  module U = URLSearchParamsRe;
+
+  [@bs.module "url"] [@bs.new]
+  external makeWithJson: Js.Json.t => U.t = "URLSearchParams";
+
+  let make = json => json->makeWithJson->U.toString;
+};
+
 module Utils = {
   let s = RR.string;
 
@@ -46,8 +55,6 @@ module Utils = {
     | exception err => Result.Error(`ParseError(Js.String.make(err)))
     | output => Result.Ok(output)
     };
-
-  let makeQueryString = params => UrlSearchParams.(make(params)->toString);
 
   /* return true if given file exists and less than 6 hours old */
   let isCached = filename =>
