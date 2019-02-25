@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0",
+    "bs-emotion": "^0.1.1",
+    "bs-emotion-ppx": "^0.0.6",
     "bs-fetch": "^0.3.1",
     "bs-remotedata": "^1.0.0",
     "bs-webapi": "^0.13.4",

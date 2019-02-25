@@ -1,8 +1,8 @@
 [%bs.raw {|require('isomorphic-fetch')|}];
 open Prelude;
 
-let sortEvents =
-  List.sort(_, (a, b) => Date.compare(a.Event_t.start, b.start));
+let sortEvents = events =>
+  events->List.sort((a, b) => Date.compare(a.Event_t.start, b.start));
 
 let fetch = () => {
   let filename = "events.json";

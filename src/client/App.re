@@ -1,6 +1,7 @@
 open Prelude;
 open Utils;
 open Printf;
+module Css = AppStyles;
 
 type remoteEvents = RemoteData.t(Event_t.error, Event_t.events);
 
@@ -36,8 +37,8 @@ let make = _children => {
     },
 
   render: ({state}) =>
-    <div className="container p-4">
-      <h1 className="mb-4"> "Events Near You"->s </h1>
+    <div className=Css.container>
+      <h1> "Events Near You"->s </h1>
       {switch (state.events) {
        | NotAsked
        | Loading => <div> "Loading event..."->s </div>
@@ -45,23 +46,24 @@ let make = _children => {
          <div> {("Failed to load events: " ++ err->Js.String.make)->s} </div>
        | Success(events) =>
          <>
-           <div className="font-bold mb-4">
+           <div className=Css.showing>
              {("Showing " ++ events->List.length->string_of_int ++ " events")
               ->s}
            </div>
-           <ol>
+           <ol className=Css.events>
              {events
               ->List.map(event =>
                   <li
                     key={event.externalId->Wrap.ExternalId.unwrap}
-                    className="mb-2">
-                    <a className="mr-2" href={event.url} target="_blank">
+                    className=Css.event>
+                    <a
+                      className=Css.eventName href={event.url} target="_blank">
                       event.name->s
                     </a>
-                    <span className="mr-2">
+                    <span className=Css.eventDate>
                       {event.start->Js.Date.toLocaleString->s}
                     </span>
-                    <div className="text-grey-dark text-sm">
+                    <div className=Css.eventLocation>
                       {switch (event.venue.name, event.venue.address.address1) {
                        | (Some(name), Some(addr)) =>
                          sprintf("%s (%s)", name, addr)
