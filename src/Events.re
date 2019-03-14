@@ -12,8 +12,8 @@ let fetch = () => {
     ->Event_bs.read_eventOutput
     ->Future.value;
   } else {
-    // Ipapi.fetch()
-    Ipapi.mockFetch()
+    Ipapi.fetch()
+    // Ipapi.mockFetch()
     ->Future.flatMapOk(result => {
         Js.log(
           Printf.sprintf(
