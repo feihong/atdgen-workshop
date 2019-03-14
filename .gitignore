@@ -1,5 +1,6 @@
 .merlin
 /_opam/
+/_build/
 /node_modules/
 /lib/
 /.cache/

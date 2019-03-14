@@ -24,7 +24,7 @@
   "scripts": {
     "postinstall": "opam pin add atd --dev-repo && opam pin add atdgen --dev-repo",
     "start": "node server.js",
-    "main": "node main.js",
+    "main": "node src/Main.bs.js",
     "clean": "bsb -clean-world",
     "build": "bsb -make-world",
     "gen": "source atdgen.sh"
