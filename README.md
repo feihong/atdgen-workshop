@@ -42,7 +42,7 @@ Create the following `esy.json` configuration file in the project root folder:
 
 Install atdgen
 
-    esy install
+    esy install && esy build
 
 Install BuckleScript
 

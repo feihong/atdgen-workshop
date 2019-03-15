@@ -22,7 +22,6 @@
     "reason-react": "^0.5.3"
   },
   "scripts": {
-    "postinstall": "opam pin add atd --dev-repo && opam pin add atdgen --dev-repo",
     "start": "node server.js",
     "main": "node src/Main.bs.js",
     "clean": "bsb -clean-world",
