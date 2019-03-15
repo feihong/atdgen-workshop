@@ -3,9 +3,9 @@ function build {
   base=$(basename $input)
 
   # Generate type definitions
-  atdgen -t $1
+  esy x atdgen -t $1
   # Generate JSON functions
-  atdgen -bs $1
+  esy x atdgen -bs $1
   # Move to gen folder
   mv ${input}_t.mli src/gen/
   mv ${input}_t.ml src/gen/

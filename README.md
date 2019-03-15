@@ -18,21 +18,31 @@ Other topics covered by this workshop:
 
 We assume that you are using a Unix operating system, and have [yarn installed](https://yarnpkg.com/lang/en/docs/install/).
 
-Install opam and OCaml switch
+Install esy
 
-    brew install opam
+    npm install -g esy
 
-    # Initialise the opam state, but don't setup any compiler switch yet
-    opam init --bare --shell-hook --enable-completion --enable-shell-hook
+Create the following `esy.json` configuration file in the project root folder:
 
-    # Create a switch in the current directory that uses version 4.07.1 of the OCaml compiler. Answer yes to all yes/no questions without prompting.
-    opam switch create . 4.07.1 --yes
+```json
+{
+  "dependencies": {
+    "@opam/atd": "*",
+    "@opam/atdgen": "*"
+  },
+  "resolutions": {
+    "@opam/atd": "github:mjambon/atd:atd.opam#8089d9e",
+    "@opam/atdgen": "github:mjambon/atd:atdgen.opam#8089d9e"
+  },
+  "devDependencies": {
+    "ocaml": "~4.7.1"
+  }
+}
+```
 
-    # Install atd and atdgen from master instead of using official release.
-    opam pin add atd --dev-repo --yes
-    opam pin add atdgen --dev-repo --yes
+Install atdgen
 
-Note: Run `opam switch list-available` to get a list of all available compiler versions. The `opam switch create` command tends to take a long time.
+    esy install
 
 Install BuckleScript
 
